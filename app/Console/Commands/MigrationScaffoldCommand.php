@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Database\Migrations\MigrationCreator;
 
 class MigrationScaffoldCommand extends Command
@@ -12,7 +13,7 @@ class MigrationScaffoldCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'scaffold:migration {datatype}';
+    protected $signature = 'scaffold:migration {datatype : The datatype class name}';
 
     /**
      * The console command description.
@@ -28,16 +29,19 @@ class MigrationScaffoldCommand extends Command
      */
         protected $creator;
 
+        protected $files;
+
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct(MigrationCreator $creator)
+    public function __construct(MigrationCreator $creator, Filesystem $files)
     {
         parent::__construct();
 
         $this->creator = $creator;
+        $this->files = $files;
     }
 
     /**
@@ -59,6 +63,8 @@ class MigrationScaffoldCommand extends Command
             true
         );
 
+        $this->fillMigrationFile($file, $dataType);
+
         $fileName = pathinfo($file, PATHINFO_FILENAME);
         $this->line("<info>Created Migration:</info> {$fileName}");
     }
@@ -78,7 +84,23 @@ class MigrationScaffoldCommand extends Command
         if (class_exists($class_name))
             return new $class_name;
         else
-            throw Exception("Unable to find class ".$class_name);
+            throw new \Exception("Unable to find class ".$class_name);
+    }
+
+    protected function fillMigrationFile($file, $dataType)
+    {
+        $fieldString = "";
+        foreach ($dataType->getFields() as $field) {
+            if ($field['type'] == 'text'){
+                $fieldString .= "\$table->string('{$field["name"]}');\n            ";    
+            }
+        }
+        $content = $this->files->get($file);
+        $position = strpos($content, '$table->timestamps()');                
+        $content = substr_replace($content, $fieldString, $position, 0);
+
+        $this->files->put($file, $content);
+
     }
 
     protected function getArguments()
