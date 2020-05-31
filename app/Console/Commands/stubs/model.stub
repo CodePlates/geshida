@@ -1,0 +1,13 @@
+<?php
+
+namespace DummyNamespace;
+
+use App\CrudModel;
+use App\Datatypes\DummyDatatype as DummyDatatypeDatatype;
+
+class DummyClass extends CrudModel
+{
+    
+   $datatype = DummyDatatypeDatatype::class;
+
+}
