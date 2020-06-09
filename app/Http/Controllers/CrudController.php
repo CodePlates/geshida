@@ -3,9 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\CrudAction;
 
 class CrudController extends Controller
 {
+
+    protected $crud;
+
+    public function __construct(CrudAction $crud)
+    {        
+        $this->crud = $crud;
+        $this->setup();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +22,16 @@ class CrudController extends Controller
      */
     public function index()
     {
-        //
+        if (method_exists($this, 'setupIndex')) {
+            $this->setupIndex();
+        }
+
+        $dataItems = $this->crud->getAll();
+        $datatype = $this->crud->datatype();
+        return view()->first(
+            ['crud.index'], 
+            compact('dataItems', 'datatype')
+        );
     }
 
     /**

@@ -8,6 +8,6 @@ use App\Datatypes\Post as PostDatatype;
 class Post extends CrudModel
 {
     
-   protected $datatype = PostDatatype::class;
+   static $datatype = PostDatatype::class;
 
 }

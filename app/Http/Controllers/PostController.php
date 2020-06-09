@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class PostController extends CrudController
 {
+
+	public function setup()
+	{
+		$this->crud->setModel(Post::class);
+	}
 	/**
 	 * Display a listing of the resource.
 	 *

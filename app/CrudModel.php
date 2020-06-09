@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class CrudModel extends Model{
 
-	public function getDataType()
+	public static function getDataType()
 	{
-		if (isset($this->datatype))
-			return $this->datatype;
+		if (isset(static::$datatype))
+			return static::$datatype;
 
-		$class_name = (new \ReflectionClass($this))->getShortName();
+		$class_name = (new \ReflectionClass(static::class))->getShortName();
 		return $class_name;
 	}
 }
