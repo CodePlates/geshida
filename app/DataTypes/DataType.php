@@ -2,6 +2,8 @@
 namespace App\DataTypes;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
+
 
 abstract class DataType {
 
@@ -17,5 +19,10 @@ abstract class DataType {
   public function getFields() 
   {
     return $this->fields ?? [];
+  }
+
+  public function getFieldNames()
+  {
+    return Arr::pluck($this->getFields(), 'name');
   }
 }

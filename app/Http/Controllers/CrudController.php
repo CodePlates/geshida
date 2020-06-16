@@ -25,13 +25,12 @@ class CrudController extends Controller
         if (method_exists($this, 'setupIndex')) {
             $this->setupIndex();
         }
-
-        $dataItems = $this->crud->getAll();
-        $datatype = $this->crud->datatype();
-        return view()->first(
-            ['crud.index'], 
-            compact('dataItems', 'datatype')
-        );
+        
+        return view()->first(['crud.index'], [
+            'dataItems' => $this->crud->getAll(), 
+            'datatype'  => $this->crud->datatype(),
+            'fields'    => $this->crud->getFields()
+        ]);
     }
 
     /**

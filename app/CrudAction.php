@@ -33,8 +33,7 @@ class CrudAction {
 	public function getFields()
 	{
 		if (isset($this->fields)) return $this->fields;
-		// FIXME: get all fields in datatype
-		return []; 
+		return $this->datatype()->getFieldNames(); 
 	}
 
 
