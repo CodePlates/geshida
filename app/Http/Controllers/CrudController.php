@@ -27,6 +27,7 @@ class CrudController extends Controller
         }
         
         return view()->first(['crud.index'], [
+            'dataKey'   => $this->crud->datatype()->getName(),
             'dataItems' => $this->crud->getAll(), 
             'datatype'  => $this->crud->datatype(),
             'fields'    => $this->crud->getFields()

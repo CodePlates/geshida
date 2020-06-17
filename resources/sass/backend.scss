@@ -22,10 +22,11 @@ $topbar-height: 50px;
 }
 
 #app-sidebar {
-	background-color: #6f3d9e;
+	background-color: #585858;
 	width: $sidebar-width;
 	position: fixed;
 	height: 100%;
+
 }
 
 .app-body {
@@ -36,7 +37,7 @@ $topbar-height: 50px;
 }
 
 .app-content {
-	background-color: #9df2df;
 	margin-left: $sidebar-width;
 	flex: 1;
+	margin-bottom: 20px;
 }

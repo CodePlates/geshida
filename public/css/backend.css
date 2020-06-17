@@ -10895,7 +10895,7 @@ a.text-dark:focus {
 }
 
 #app-sidebar {
-  background-color: #6f3d9e;
+  background-color: #585858;
   width: 200px;
   position: fixed;
   height: 100%;
@@ -10909,8 +10909,8 @@ a.text-dark:focus {
 }
 
 .app-content {
-  background-color: #9df2df;
   margin-left: 200px;
   flex: 1;
+  margin-bottom: 20px;
 }
 

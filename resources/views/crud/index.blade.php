@@ -1,17 +1,26 @@
 @extends('layouts.backend')
 
 @section('content')
-<h1>Listing</h1>
 
-<ul>
-	@foreach($dataItems as $dataItem)
-	<li>{{ $dataItem->title }}</li>
-	@endforeach
-</ul>
-<table class="table">
+<div class="container">
+	<h1>{{ __($dataKey.'.title_index') }}</h1>
 
-</table>
-
-<div style="height: 400px; background-color: #040404; width: 100px; margin-bottom: 20px;"></div>
+	<table class="table table-bordered">
+		<thead>
+			@foreach($fields as $field)
+				<th>{{ __("{$dataKey}.{$field}") }}</th>
+			@endforeach
+		</thead>
+		<tbody>
+			@foreach($dataItems as $dataItem)
+				<tr>
+					@foreach($fields as $field)
+						<td>{{ $dataItem->{$field} }}</td>
+					@endforeach
+				</tr>
+			@endforeach
+		</tbody>
+	</table>
+</div>
 
 @endsection

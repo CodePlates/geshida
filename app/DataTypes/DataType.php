@@ -25,4 +25,9 @@ abstract class DataType {
   {
     return Arr::pluck($this->getFields(), 'name');
   }
+
+  public function getName()
+  {
+    return $this->getTableName();
+  }
 }
