@@ -97,6 +97,8 @@ class CrudController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->crud->delete($id);
+        $dataKey = $this->crud->datatype()->getName();
+        return redirect()->route($dataKey.".index");
     }
 }

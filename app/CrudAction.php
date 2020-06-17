@@ -20,6 +20,16 @@ class CrudAction {
 		return $this->model::all();	
 	}
 
+	public function getModel()
+	{
+		return $this->model;
+	}
+
+	public function delete($id)
+	{
+		$this->model::destroy($id);
+	}
+
 	public function datatype()
 	{
 		return $this->model::getDatatype();
