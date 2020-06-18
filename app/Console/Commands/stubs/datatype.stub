@@ -1,0 +1,18 @@
+<?php 
+
+namespace DummyNamespace;
+
+use App\FieldTypes\Field;
+/**
+ *  Post datatype for test purpose
+ *  will delete later
+ */
+class DummyClass extends DataType {
+
+	protected function build()
+	{
+		return [
+			Field\Text::create('name'),
+		];
+	}
+}

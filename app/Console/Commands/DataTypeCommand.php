@@ -3,40 +3,42 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Console\GeneratorCommand;
+use App\DataTypes\DataType;
 
-class DataTypeCommand extends Command
+class DataTypeCommand extends GeneratorCommand
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'datatype';
+    protected $signature = 'make:datatype {name : The name of the datatype}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create subsystem datatype';
+    protected $description = 'Create a new subsystem datatype';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    protected $type = 'DataType';
+
+    protected function getStub()
     {
-        parent::__construct();
+        return __DIR__.'/stubs/datatype.stub';
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
-    public function handle()
+    protected function getDefaultNamespace($rootNamespace)
     {
-        //
+        return 'App\DataTypes';
     }
+
+    protected function getArguments()
+    {
+        return [
+            ['name', InputArgument::REQUIRED, 'The name of the datatype'],
+        ];
+    }
+    
 }

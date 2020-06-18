@@ -29,8 +29,11 @@ if (! function_exists('crud_route')) {
 		} elseif (is_string($model) && is_subclass_of($model, CrudModel::class)) {
 			$routeSlug = $model::getDataType()->getName();
 			return route("{$routeSlug}.{$action}");
-		} else {			
-			throw new Exception("Unsupported model passed to crud_route(): ".print_r($model));
+		} else {						
+			$className = (is_object($model)) ? get_class($model) : $model;
+			$error = "Unsupported model passed to crud_route(): ".$className;
+			$error .= ", Expected instance or subclass of CrudModel";
+			throw new Exception($error);
 			
 		}
 	}
