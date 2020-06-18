@@ -93,6 +93,8 @@ class MigrationScaffoldCommand extends Command
         foreach ($dataType->getFields() as $field) {
             if ($field['type'] == 'text'){
                 $fieldString .= "\$table->string('{$field["name"]}');\n            ";    
+            }elseif ($field['type'] == 'textarea'){
+                $fieldString .= "\$table->text('{$field["name"]}');\n            ";    
             }
         }
         $content = $this->files->get($file);

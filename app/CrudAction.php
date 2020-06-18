@@ -14,6 +14,11 @@ class CrudAction {
 		$this->model = $model;
 	}
 
+	public function find($key)
+	{
+		return $this->model::findOrFail($key);
+	}
+
 	public function getAll()
 	{
 		// TODO: make query more modifiable

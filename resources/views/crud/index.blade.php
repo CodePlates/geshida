@@ -3,7 +3,14 @@
 @section('content')
 
 <div class="container">
-	<h1>{{ __($dataKey.'.title_index') }}</h1>
+	<div class="row mr-0">
+		<h1 class="col">{{ __($dataKey.'.title_index') }}</h1>
+		<div class="createbtn d-flex align-items-center">
+			<a href="{{ route($dataKey.".create") }}" class="btn btn-primary">
+				{{ __($dataKey.'.create') }}
+			</a>
+		</div>
+	</div>
 
 	<table class="table table-bordered">
 		<thead>

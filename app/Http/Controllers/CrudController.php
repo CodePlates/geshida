@@ -41,7 +41,17 @@ class CrudController extends Controller
      */
     public function create()
     {
-        //
+        if (method_exists($this, 'setupCreate')) {
+            $this->setupCreate();
+        }
+        
+        $model = $this->crud->getModel();
+        return view()->first(['crud.create'], [
+            'dataKey'   => $this->crud->datatype()->getName(),
+            'dataItem'  => new $model, 
+            'datatype'  => $this->crud->datatype(),
+            'fields'    => $this->crud->getFields()
+        ]);
     }
 
     /**
@@ -52,7 +62,19 @@ class CrudController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if (method_exists($this, 'setupCreate')) {
+            $this->setupCreate();
+        }
+
+        $model = $this->crud->getModel();
+        $dataItem = new $model;
+        foreach ($this->crud->getFields() as $fieldName) {
+            $dataItem->{$fieldName} = $request->{$fieldName};
+        }
+        $dataItem->save();
+
+        $dataKey = $this->crud->datatype()->getName();
+        return redirect()->route($dataKey.".index");
     }
 
     /**
@@ -74,7 +96,17 @@ class CrudController extends Controller
      */
     public function edit($id)
     {
-        //
+        $dataItem = $this->crud->find($id);
+        if (method_exists($this, 'setupEdit')) {
+            $this->setupEdit($dataItem);
+        }
+        
+        return view()->first(['crud.edit'], [
+            'dataKey'   => $this->crud->datatype()->getName(),
+            'dataItem'  => $dataItem, 
+            'datatype'  => $this->crud->datatype(),
+            'fields'    => $this->crud->getFields()
+        ]);
     }
 
     /**
@@ -86,7 +118,17 @@ class CrudController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $dataItem = $this->crud->find($id);
+        if (method_exists($this, 'setupEdit')) {
+            $this->setupEdit($dataItem);
+        }
+
+        foreach ($this->crud->getFields() as $fieldName) {
+            $dataItem->{$fieldName} = $request->{$fieldName};
+        }
+        $dataItem->save();
+
+        return redirect()->route($dataKey.".index");
     }
 
     /**
