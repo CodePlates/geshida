@@ -1,0 +1,16 @@
+<?php 
+
+return [
+	'title_index' => 'DummyPluralName',
+	'title_create' => 'Create DummyName',
+	'title_edit' => 'Edit DummyName',
+
+	'create' => 'Create DummyName',
+	'update' => 'Save',
+	'store' => 'Save',
+
+	//Fields
+	DummyFields
+
+
+];
