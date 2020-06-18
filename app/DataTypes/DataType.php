@@ -4,6 +4,7 @@ namespace App\DataTypes;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 use App\FieldTypes\FieldType;
+use App\FieldTypes\FileFieldType;
 
 abstract class DataType {
 
@@ -31,9 +32,26 @@ abstract class DataType {
     return Str::plural(strtolower($class_name));  
   }
 
-  public function getFields() 
+  public function getFields(array $fieldNames = null) 
   {
-    return $this->fields ?? [];
+    if (is_null($fieldNames)) 
+      return $this->fields;
+      
+    return $this->fields->only($fieldNames);
+  }
+
+  public function hasFileFields(array $fieldNames = null)
+  {
+    $fields = $this->getFields($fieldNames);
+    return $fields->contains(function ($value, $key) {
+        return ($value instanceof FileFieldType);
+    });
+  }
+
+  public function getFileFields(array $fieldNames = null)
+  {
+    $fields = $this->getFields($fieldNames);
+    return $fields->whereInstanceOf(FileFieldType::class);
   }
 
   public function getField($fieldName) 

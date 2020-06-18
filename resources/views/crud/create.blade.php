@@ -4,7 +4,7 @@
 <div class="container">
 	<h1>{{ label($datatype, 'title_create') }}</h1>
 
-	<form action="{{ crud_route("store", $model) }}" method="post" enctype="multipart/form-data">
+	<form action="{{ crud_route("store", $model) }}" method="post" @if($datatype->hasFileFields($fields)) enctype="multipart/form-data" @endif>
 		@csrf		
 		
 		@foreach($fields as $field)	

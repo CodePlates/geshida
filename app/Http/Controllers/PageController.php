@@ -31,6 +31,7 @@ class PageController extends CrudController
 	public function setupCreate()
 	{
 		//
+		// $this->crud->setFields(['name']);
 	}
 	
 
