@@ -9,23 +9,30 @@ class Crud {
 
 	protected static $models = [];
 
-	public static function register(string $model, $controller, $options = [])
+	public static function register(string $modelClass, $controller, $options = [])
 	{
-		if (!is_subclass_of($model, CrudModel::class)) {
-			$error = "Unsupported model passed to Crud::register(): ".$model;
+		if (!is_subclass_of($modelClass, CrudModel::class)) {
+			$error = "Unsupported model passed to Crud::register(): ".$modelClass;
 			$error .= ", Expected subclass of CrudModel";
 			throw new Exception($error);
 		}
 			
-		$datatype = $model::getDataType();		
+		$datatype = $modelClass::getDataType();	
+		$slug = $datatype->getSlug();	
 
-		self::$models[$model] = [
+		self::$models[$modelClass] = [
 			'controller'	=> $controller,
 			'options'		=> static::fillOptions($options),
-			'model'			=> $model,
+			'model'			=> $modelClass,
+			'slug'			=> $slug,
 		];
 
-		\Route::resource($datatype->getSlug(), $controller);
+		\Route::resource($slug, $controller);
+	}
+
+	public static function getSlug(string $modelClass)
+	{
+		return static::$models[$modelClass]['slug'];
 	}
 
 
