@@ -4,7 +4,7 @@
 <div class="container">
 	<h1>{{ label($datatype, 'title_create') }}</h1>
 
-	<form action="{{ route($dataKey.".store",[$dataItem]) }}" method="post">
+	<form action="{{ crud_route("store", $model) }}" method="post">
 		@csrf		
 		
 		@foreach($fields as $field)	

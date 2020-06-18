@@ -4,7 +4,7 @@
 <div class="container">
 	<h1>{{ label($datatype, 'title_edit') }}</h1>
 
-	<form action="{{ route($dataKey.".update",[$dataItem]) }}" method="post">
+	<form action="{{ crud_route("update", $dataItem) }}" method="post">
 		@method('PUT')
 		@csrf		
 		

@@ -28,11 +28,11 @@ class CrudController extends Controller
             $this->setupIndex($query);
         }
         
-        return view()->first(['crud.index'], [
-            'dataKey'   => $this->crud->datatype()->getName(),
+        return view()->first(['crud.index'], [            
+            'model'     => $this->crud->getModel(),
             'dataItems' => $query->get(), 
             'datatype'  => $this->crud->datatype(),
-            'fields'    => $this->crud->getFields()
+            'fields'    => $this->crud->getFields(),
         ]);
     }
 
@@ -49,7 +49,7 @@ class CrudController extends Controller
         
         $model = $this->crud->getModel();
         return view()->first(['crud.create'], [
-            'dataKey'   => $this->crud->datatype()->getName(),
+            'model'     => $model,
             'dataItem'  => new $model, 
             'datatype'  => $this->crud->datatype(),
             'fields'    => $this->crud->getFields()
@@ -75,8 +75,8 @@ class CrudController extends Controller
         }
         $dataItem->save();
 
-        $dataKey = $this->crud->datatype()->getName();
-        return redirect()->route($dataKey.".index");
+        $model = $this->crud->getModel();
+        return redirect(crud_route("index", $model));
     }
 
     /**
@@ -104,7 +104,7 @@ class CrudController extends Controller
         }
         
         return view()->first(['crud.edit'], [
-            'dataKey'   => $this->crud->datatype()->getName(),
+            'model'     => $this->crud->getModel(),
             'dataItem'  => $dataItem, 
             'datatype'  => $this->crud->datatype(),
             'fields'    => $this->crud->getFields()
@@ -130,8 +130,8 @@ class CrudController extends Controller
         }
         $dataItem->save();
 
-        $dataKey = $this->crud->datatype()->getName();
-        return redirect()->route($dataKey.".index");
+        $model = $this->crud->getModel();
+        return redirect(crud_route("index", $model));
     }
 
     /**
@@ -143,7 +143,7 @@ class CrudController extends Controller
     public function destroy($id)
     {
         $this->crud->delete($id);
-        $dataKey = $this->crud->datatype()->getName();
-        return redirect()->route($dataKey.".index");
+        $model = $this->crud->getModel();
+        return redirect(crud_route("index", $model));
     }
 }

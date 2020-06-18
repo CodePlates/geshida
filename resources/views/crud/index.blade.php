@@ -6,7 +6,7 @@
 	<div class="row mr-0">
 		<h1 class="col">{{ label($datatype, 'title_index') }}</h1>
 		<div class="createbtn d-flex align-items-center">
-			<a href="{{ route($dataKey.".create") }}" class="btn btn-primary">
+			<a href="{{ crud_route('create', $model) }}" class="btn btn-primary">
 				{{ label($datatype, 'create') }}
 			</a>
 		</div>
@@ -26,11 +26,11 @@
 						<td>{{ $dataItem->{$field} }}</td>
 					@endforeach
 					<td>
-						<a href="{{ route($dataKey.".edit",[$dataItem]) }}" class="btn btn-primary">
+						<a href="{{ crud_route("edit", $dataItem) }}" class="btn btn-primary">
 							<i class="fa fa-pencil"></i>
 							<span>Edit</span>
 						</a>
-						<form style="display: inline;" action="{{ route($dataKey.".destroy",[$dataItem]) }}" method="POST">
+						<form style="display: inline;" action="{{ crud_route("destroy", $dataItem) }}" method="POST">
 							@csrf
 							@method('DELETE')
 							<button type="submit" class="btn btn-danger">
