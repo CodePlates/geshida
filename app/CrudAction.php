@@ -8,6 +8,7 @@ class CrudAction {
 
 	protected $model;
 	protected $fields; 
+	protected $extraData = [];
 
 	public function setModel($model)
 	{
@@ -18,7 +19,20 @@ class CrudAction {
 	{
 		return $this->model::findOrFail($key);
 	}
-	
+
+	public function appendData(array $data)
+	{
+		$this->extraData = array_merge($this->extraData, $data);
+	}
+
+	public function getData()
+	{
+		return array_merge([            
+         'model'     => $this->getModel(),             
+         'datatype'  => $this->datatype(),
+         'fields'    => $this->getFields(),
+     	], $this->extraData);
+	}	
 
 	public function getModel()
 	{

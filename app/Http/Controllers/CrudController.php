@@ -28,12 +28,8 @@ class CrudController extends Controller
             $this->setupIndex($query);
         }
         
-        return view()->first(['crud.index'], [            
-            'model'     => $this->crud->getModel(),
-            'dataItems' => $query->get(), 
-            'datatype'  => $this->crud->datatype(),
-            'fields'    => $this->crud->getFields(),
-        ]);
+        $this->crud->appendData(['dataItems' => $query->get()]);
+        return view()->first(['crud.index'], $this->crud->getData());
     }
 
     /**
@@ -48,12 +44,8 @@ class CrudController extends Controller
         }
         
         $model = $this->crud->getModel();
-        return view()->first(['crud.create'], [
-            'model'     => $model,
-            'dataItem'  => new $model, 
-            'datatype'  => $this->crud->datatype(),
-            'fields'    => $this->crud->getFields()
-        ]);
+        $this->crud->appendData(['dataItem' => new $model]);
+        return view()->first(['crud.create'], $this->crud->getData());
     }
 
     /**
@@ -103,12 +95,8 @@ class CrudController extends Controller
             $this->setupEdit($dataItem);
         }
         
-        return view()->first(['crud.edit'], [
-            'model'     => $this->crud->getModel(),
-            'dataItem'  => $dataItem, 
-            'datatype'  => $this->crud->datatype(),
-            'fields'    => $this->crud->getFields()
-        ]);
+        $this->crud->appendData(compact('dataItem'));
+        return view()->first(['crud.edit'], $this->crud->getData());
     }
 
     /**
