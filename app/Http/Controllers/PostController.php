@@ -18,9 +18,10 @@ class PostController extends CrudController
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function setupIndex()
+	public function setupIndex($query)
 	{
-		//
+		$query->latest();
+		$this->crud->setFields(['title']);
 	}
 
 	/**

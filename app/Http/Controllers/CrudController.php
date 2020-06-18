@@ -22,13 +22,15 @@ class CrudController extends Controller
      */
     public function index()
     {
+        $model = $this->crud->getModel();
+        $query = $model::query();
         if (method_exists($this, 'setupIndex')) {
-            $this->setupIndex();
+            $this->setupIndex($query);
         }
         
         return view()->first(['crud.index'], [
             'dataKey'   => $this->crud->datatype()->getName(),
-            'dataItems' => $this->crud->getAll(), 
+            'dataItems' => $query->get(), 
             'datatype'  => $this->crud->datatype(),
             'fields'    => $this->crud->getFields()
         ]);

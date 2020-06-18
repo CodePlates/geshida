@@ -18,12 +18,7 @@ class CrudAction {
 	{
 		return $this->model::findOrFail($key);
 	}
-
-	public function getAll()
-	{
-		// TODO: make query more modifiable
-		return $this->model::all();	
-	}
+	
 
 	public function getModel()
 	{
