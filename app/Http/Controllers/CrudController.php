@@ -128,6 +128,7 @@ class CrudController extends Controller
         }
         $dataItem->save();
 
+        $dataKey = $this->crud->datatype()->getName();
         return redirect()->route($dataKey.".index");
     }
 

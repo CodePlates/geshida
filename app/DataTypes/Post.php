@@ -1,20 +1,18 @@
 <?php 
 namespace App\DataTypes;
 
+use App\FieldTypes\Field;
 /**
  *  Post datatype for test purpose
  *  will delete later
  */
 class Post extends DataType {
 
-  protected $fields = [
-    [
-      'name' => 'title',
-      'type' => 'text',
-    ],
-    [
-      'name' => 'excerpt',
-      'type' => 'textarea'
-    ]
-  ];
+  protected function build()
+  {
+    return [
+      Field\Text::create('title'),
+      Field\TextArea::create('excerpt'),
+    ];
+  }
 }

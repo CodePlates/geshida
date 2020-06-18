@@ -90,12 +90,8 @@ class MigrationScaffoldCommand extends Command
     protected function fillMigrationFile($file, $dataType)
     {
         $fieldString = "";
-        foreach ($dataType->getFields() as $field) {
-            if ($field['type'] == 'text'){
-                $fieldString .= "\$table->string('{$field["name"]}');\n            ";    
-            }elseif ($field['type'] == 'textarea'){
-                $fieldString .= "\$table->text('{$field["name"]}');\n            ";    
-            }
+        foreach ($dataType->getFields() as $field) {           
+            $fieldString .= "\$table->{$field->getDbColumnType()}('{$field->getName()}');\n            ";             
         }
         $content = $this->files->get($file);
         $position = strpos($content, '$table->timestamps()');                

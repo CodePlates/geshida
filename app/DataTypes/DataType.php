@@ -3,10 +3,22 @@ namespace App\DataTypes;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
-
+use App\FieldTypes\FieldType;
 
 abstract class DataType {
 
+  protected $fields;
+
+  function __construct()
+  {
+    $this->fields = collect($this->build())->keyBy('name');
+  }
+
+  /**
+   * @return array
+   */
+  abstract protected function build();
+  
   public function getTableName() 
   {
     if (isset($this->table))
@@ -23,20 +35,17 @@ abstract class DataType {
 
   public function getField($fieldName) 
   {
-    foreach ($this->getFields() as $field) {
-      if ($field['name'] == $fieldName)
-        return $field;
-    }
+    return $this->fields->get($fieldName);
   }
 
-  public function getFieldType($fieldName)
+  public function getFormField($fieldName)
   {
-    return $this->getField($fieldName)['type'];
+    return $this->getField($fieldName)->getFormField();
   }
 
   public function getFieldNames()
   {
-    return Arr::pluck($this->getFields(), 'name');
+    return $this->fields->keys()->all();
   }
 
   public function getName()

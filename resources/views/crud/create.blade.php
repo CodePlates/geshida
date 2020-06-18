@@ -8,7 +8,7 @@
 		@csrf		
 		
 		@foreach($fields as $field)	
-			@includeFirst(['formfields.'.$datatype->getFieldType($field), 'formfields.text'])	
+			@includeFirst(['formfields.'.$datatype->getFormField($field), 'formfields.text'])	
 		@endforeach
 
 		<div class="buttons">
