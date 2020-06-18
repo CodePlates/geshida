@@ -8,6 +8,6 @@ use App\Datatypes\DummyDatatype as DummyDatatypeDatatype;
 class DummyClass extends CrudModel
 {
     
-   protected $datatype = DummyDatatypeDatatype::class;
+   private static $datatype = DummyDatatypeDatatype::class;
 
 }

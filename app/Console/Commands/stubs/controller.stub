@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class DummyClass extends CrudController
 {
+
+	public function setup()
+	{
+		$this->crud->setModel(DummyModelClass::class);
+	}
 	/**
 	 * Display a listing of the resource.
 	 *

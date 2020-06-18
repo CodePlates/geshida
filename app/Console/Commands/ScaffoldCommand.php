@@ -11,14 +11,14 @@ class ScaffoldCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'scaffold';
+    protected $signature = 'scaffold:common {datatype : The datatype class name}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Scaffold subsystem resources from datatype';
+    protected $description = 'Scaffold common subsystem resources from datatype';
 
     /**
      * Create a new command instance.
@@ -37,6 +37,10 @@ class ScaffoldCommand extends Command
      */
     public function handle()
     {
-        //
+        $datatype = trim($this->argument('datatype'));
+        $this->call('scaffold:migration', ['datatype' => $datatype]);
+        $this->call('scaffold:model', ['datatype' => $datatype]);
+        $this->call('scaffold:controller', ['datatype' => $datatype]);
+        $this->call('scaffold:lang', ['datatype' => $datatype]);
     }
 }
