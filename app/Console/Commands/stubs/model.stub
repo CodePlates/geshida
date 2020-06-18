@@ -3,10 +3,10 @@
 namespace DummyNamespace;
 
 use App\CrudModel;
-use App\Datatypes\DummyDatatype as DummyDatatypeDatatype;
+use App\DataTypes\DummyDatatype as DummyDatatypeDatatype;
 
 class DummyClass extends CrudModel
 {    
-   private static $datatype = DummyDatatypeDatatype::class;
+   protected static $datatype = DummyDatatypeDatatype::class;
    
 }

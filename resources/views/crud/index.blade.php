@@ -4,10 +4,10 @@
 
 <div class="container">
 	<div class="row mr-0">
-		<h1 class="col">{{ __($dataKey.'.title_index') }}</h1>
+		<h1 class="col">{{ label($datatype, 'title_index') }}</h1>
 		<div class="createbtn d-flex align-items-center">
 			<a href="{{ route($dataKey.".create") }}" class="btn btn-primary">
-				{{ __($dataKey.'.create') }}
+				{{ label($datatype, 'create') }}
 			</a>
 		</div>
 	</div>
@@ -15,7 +15,7 @@
 	<table class="table table-bordered">
 		<thead>
 			@foreach($fields as $field)
-				<th>{{ __("{$dataKey}.{$field}") }}</th>
+				<th>{{ field_label($datatype, $field) }}</th>
 			@endforeach
 			<th>Actions</th>
 		</thead>

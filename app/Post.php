@@ -3,10 +3,10 @@
 namespace App;
 
 use App\CrudModel;
-use App\Datatypes\Post as PostDatatype;
+use App\DataTypes\Post as PostDatatype;
 
 class Post extends CrudModel
 {    
-   private static $datatype = PostDatatype::class;
+   protected static $datatype = PostDatatype::class;
    
 }

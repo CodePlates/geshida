@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-	<h1>{{ __($dataKey.'.title_create') }}</h1>
+	<h1>{{ label($datatype, 'title_create') }}</h1>
 
 	<form action="{{ route($dataKey.".store",[$dataItem]) }}" method="post">
 		@csrf		
@@ -12,7 +12,7 @@
 		@endforeach
 
 		<div class="buttons">
-			<button class="btn btn-primary">{{ __($dataKey.'.store') }}</button>
+			<button class="btn btn-primary">{{ label($datatype, 'store') }}</button>
 		</div>
 
 	</form>

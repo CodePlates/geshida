@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-	<h1>{{ __($dataKey.'.title_edit') }}</h1>
+	<h1>{{ label($datatype, 'title_edit') }}</h1>
 
 	<form action="{{ route($dataKey.".update",[$dataItem]) }}" method="post">
 		@method('PUT')
@@ -13,7 +13,7 @@
 		@endforeach
 
 		<div class="buttons">
-			<button class="btn btn-primary">{{ __($dataKey.'.update') }}</button>
+			<button class="btn btn-primary">{{ label($datatype, 'update') }}</button>
 		</div>
 
 	</form>

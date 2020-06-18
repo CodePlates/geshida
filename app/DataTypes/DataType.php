@@ -8,6 +8,8 @@ use App\FieldTypes\FieldType;
 abstract class DataType {
 
   protected $fields;
+  protected $table;
+  protected $langKey;
 
   function __construct()
   {
@@ -50,6 +52,14 @@ abstract class DataType {
 
   public function getName()
   {
+    return $this->getTableName();
+  }
+
+  public function getLangKey()
+  {
+    if (isset($this->langKey)) 
+      return $this->langKey;
+
     return $this->getTableName();
   }
 }
