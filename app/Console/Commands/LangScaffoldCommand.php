@@ -46,8 +46,8 @@ class LangScaffoldCommand extends Command
         $datatypeName = trim($this->argument('datatype'));
         $dataTypeClass = $this->qualifyDataTypeClass($datatypeName);
         $dataType = $this->resolve($dataTypeClass);
-        $dataKey = $dataType->getName();
-        $path = resource_path("lang/en/{$dataKey}.php");
+        $langKey = $dataType->getLangKey();
+        $path = resource_path("lang/en/{$langKey}.php");
 
         $content = $this->files->get($this->getStub());
 

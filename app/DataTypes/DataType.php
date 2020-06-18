@@ -10,6 +10,7 @@ abstract class DataType {
   protected $fields;
   protected $table;
   protected $langKey;
+  protected $slug;
 
   function __construct()
   {
@@ -49,9 +50,12 @@ abstract class DataType {
   {
     return $this->fields->keys()->all();
   }
-
-  public function getName()
+  
+  public function getSlug()
   {
+    if (isset($this->slug)) 
+      return $this->slug;
+
     return $this->getTableName();
   }
 

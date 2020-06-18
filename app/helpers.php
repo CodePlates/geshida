@@ -24,10 +24,10 @@ if (! function_exists('crud_route')) {
 	function crud_route(string $action, $model)
 	{
 		if ($model instanceof CrudModel) {
-			$routeSlug = $model->getDataType()->getName();
+			$routeSlug = $model->getDataType()->getSlug();
 			return route("{$routeSlug}.{$action}",[$model]);
 		} elseif (is_string($model) && is_subclass_of($model, CrudModel::class)) {
-			$routeSlug = $model::getDataType()->getName();
+			$routeSlug = $model::getDataType()->getSlug();
 			return route("{$routeSlug}.{$action}");
 		} else {						
 			$className = (is_object($model)) ? get_class($model) : $model;
