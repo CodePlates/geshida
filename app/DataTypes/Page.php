@@ -13,6 +13,7 @@ class Page extends DataType {
 	{
 		return [
 			Field\Text::create('name'),
+			Field\Password::create('pass'),
 		];
 	}
 }

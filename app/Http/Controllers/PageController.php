@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\CrudController;
-use App\Post;
+use App\Page;
 use Illuminate\Http\Request;
 
-class PostController extends CrudController
+class PageController extends CrudController
 {
 
 	public function setup()
 	{
-		$this->crud->setModel(Post::class);
+		$this->crud->setModel(Page::class);
 	}
 	/**
 	 * Display a listing of the resource.
@@ -20,7 +20,7 @@ class PostController extends CrudController
 	 */
 	public function setupIndex($query)
 	{
-		$query->latest();		
+		//
 	}
 
 	/**
@@ -37,10 +37,10 @@ class PostController extends CrudController
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  \App\Post  $post
+	 * @param  \App\Page  $page
 	 * @return \Illuminate\Http\Response
 	 */
-	public function setupShow(Post $post)
+	public function setupShow(Page $page)
 	{
 		//
 	}
@@ -48,10 +48,10 @@ class PostController extends CrudController
 	/**
 	 * Show the form for editing the specified resource.
 	 *
-	 * @param  \App\Post  $post
+	 * @param  \App\Page  $page
 	 * @return \Illuminate\Http\Response
 	 */
-	public function setupEdit(Post $post)
+	public function setupEdit(Page $page)
 	{
 		//
 	}

@@ -61,9 +61,15 @@ class CrudController extends Controller
         }
 
         $model = $this->crud->getModel();
+        $datatype = $this->crud->datatype();
         $dataItem = new $model;
+
         foreach ($this->crud->getFields() as $fieldName) {
-            $dataItem->{$fieldName} = $request->{$fieldName};
+            $field = $datatype->getField($fieldName);
+            if (method_exists($field, 'saveAction')) 
+                $field->saveAction($dataItem, $request->{$fieldName});
+            else
+                $dataItem->{$fieldName} = $request->{$fieldName};
         }
         $dataItem->save();
 
@@ -114,7 +120,12 @@ class CrudController extends Controller
         }
 
         foreach ($this->crud->getFields() as $fieldName) {
-            $dataItem->{$fieldName} = $request->{$fieldName};
+            if (method_exists($field, 'updateAction')) 
+                $field->updateAction($dataItem, $request->{$fieldName});
+            elseif (method_exists($field, 'saveAction')) 
+                $field->saveAction($dataItem, $request->{$fieldName});
+            else
+                $dataItem->{$fieldName} = $request->{$fieldName};
         }
         $dataItem->save();
 
