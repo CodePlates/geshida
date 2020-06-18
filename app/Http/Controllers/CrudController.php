@@ -115,11 +115,13 @@ class CrudController extends Controller
     public function update(Request $request, $id)
     {
         $dataItem = $this->crud->find($id);
+        $datatype = $this->crud->datatype();
         if (method_exists($this, 'setupEdit')) {
             $this->setupEdit($dataItem);
         }
 
         foreach ($this->crud->getFields() as $fieldName) {
+            $field = $datatype->getField($fieldName);
             if (method_exists($field, 'updateAction')) 
                 $field->updateAction($dataItem, $request->{$fieldName});
             elseif (method_exists($field, 'saveAction')) 
