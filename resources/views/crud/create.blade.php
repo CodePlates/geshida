@@ -4,7 +4,7 @@
 <div class="container">
 	<h1>{{ label($datatype, 'title_create') }}</h1>
 
-	<form action="{{ crud_route("store", $model) }}" method="post">
+	<form action="{{ crud_route("store", $model) }}" method="post" enctype="multipart/form-data">
 		@csrf		
 		
 		@foreach($fields as $field)	

@@ -11,7 +11,7 @@ return [
 
 	//Fields
 	'name' => 'Name',
-	'pass' => 'Pass',
+	'image' => 'Image',
 	
 
 
