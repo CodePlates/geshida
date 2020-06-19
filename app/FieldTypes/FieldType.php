@@ -51,7 +51,16 @@ abstract class FieldType
 
 	protected function addNameDbAttribute()
 	{
-		$this->addDbAttribute($this->getDbColumnType(), [$this->getName()]);
+		$colType = $this->getDbColumnType();
+		$attrVal = [$this->getName()];
+		if (is_array($colType)) {
+			$args = $colType;
+			$colType = $args[0];
+			unset($args[0]);
+			$attrVal = array_merge($attrVal, $args);
+		}
+
+		$this->addDbAttribute($colType, $attrVal);
 	}
 
 	protected function addDbAttribute($attribute, array $values = null)

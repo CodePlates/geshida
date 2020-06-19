@@ -110,10 +110,21 @@ class MigrationScaffoldCommand extends Command
 		foreach ($field->getDbAttributes() as $attribute => $values) {			
 			$valueStr = "";
 			if (!is_null($values))
-				$valueStr = "'".implode("', '", $values)."'";			
+				$valueStr = $this->implodeAttrValues($values); //"'".implode("', '", $values)."'";			
 			$attributeStr .= "->{$attribute}({$valueStr})";
 		}
 		return $attributeStr;
+	}
+
+	private function implodeAttrValues(array $attrValues)
+	{
+		$result = '';
+		foreach ($attrValues as $key => $value) {
+			if ($key != 0)
+				$result .= ', ';
+			$result .= str_replace('"', "'", json_encode($value));
+		}
+		return $result;
 	}
 
 
