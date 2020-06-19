@@ -13,7 +13,7 @@ class Page extends DataType {
 	{
 		return [
 			Field\Text::create('name'),
-			Field\File::create('image'),
+			Field\File::create('image')->default('default.png'),
 		];
 	}
 }

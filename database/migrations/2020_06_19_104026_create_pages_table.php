@@ -15,8 +15,8 @@ class CreatePagesTable extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('image');
+            $table->string('name', 50)->nullable();
+            $table->string('image')->nullable()->default('default.png');
             $table->timestamps();
         });
     }

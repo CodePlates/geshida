@@ -49,6 +49,18 @@ abstract class FieldType
 		return $this;
 	}
 
+	public function getDefault()
+	{
+		return $this->default;
+	}
+
+	public function default(string $default)
+	{
+		$this->default = $default;
+		$this->addDbAttribute('default', [$this->getDefault()]);
+		return $this;
+	}
+
 	protected function addNameDbAttribute()
 	{
 		$colType = $this->getDbColumnType();
