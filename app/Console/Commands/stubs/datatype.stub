@@ -12,7 +12,7 @@ class DummyClass extends DataType {
 	protected function build()
 	{
 		return [
-			Field\Text::create('name'),
+			Field\Text::create('name')->required(),
 		];
 	}
 }
