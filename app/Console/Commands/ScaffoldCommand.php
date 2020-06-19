@@ -39,8 +39,8 @@ class ScaffoldCommand extends Command
     {
         $datatype = trim($this->argument('datatype'));
         $this->call('scaffold:migration', ['datatype' => $datatype]);
-        // $this->call('scaffold:model', ['datatype' => $datatype]);
-        // $this->call('scaffold:controller', ['datatype' => $datatype]);
+        $this->call('scaffold:model', ['datatype' => $datatype]);
+        $this->call('scaffold:controller', ['datatype' => $datatype]);
         $this->call('scaffold:lang', ['datatype' => $datatype]);
     }
 }
