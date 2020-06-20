@@ -33,6 +33,11 @@ abstract class FieldType
 		return $this->name;
 	}
 
+	protected function getDbColumnName()
+	{
+		return $this->name;
+	}
+
 	abstract function getFormField();
 	
 	abstract function getDbColumnType();
@@ -67,7 +72,7 @@ abstract class FieldType
 	protected function addNameDbAttribute()
 	{
 		$colType = $this->getDbColumnType();
-		$attrVal = [$this->getName()];
+		$attrVal = [$this->getDbColumnName()];
 		if (is_array($colType)) {
 			$args = $colType;
 			$colType = $args[0];

@@ -34,13 +34,21 @@ class DropDown extends FieldType
 		return [];
 	}
 
-  public function getDbColumnType()
-  {
-    return 'string';
-  }
+	public function getDbColumnType()
+	{
+		if ($this->optionsType == 'list')
+			return 'string';
+		else
+			return 'unsignedBigInteger';
+	}
 
-  public function getFormField()
-  {
-    return 'dropdown';
-  }
+	public function getDbColumnName()
+	{
+		return $this->name."_id";
+	}
+
+	public function getFormField()
+	{
+		return 'dropdown';
+	}
 }

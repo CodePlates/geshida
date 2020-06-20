@@ -8,44 +8,44 @@ use Illuminate\Database\Migrations\MigrationCreator;
 
 class DatatypeMigrationCreator extends MigrationCreator
 {
-  protected $datatype;
+	protected $datatype;
 
-  public function createFromDatatype(DataType $datatype)
-  {  
-    $this->datatype = $datatype;  
+	public function createFromDatatype(DataType $datatype)
+	{  
+		$this->datatype = $datatype;  
 		$table = $datatype->getTableName().rand(0,1000); 
 		$file = parent::create(
-      "create_{$table}_table", 
-      $this->getMigrationPath(), 
-      $table, 
-      true
-    );
+			"create_{$table}_table", 
+			$this->getMigrationPath(), 
+			$table, 
+			true
+		);
 
 
 		//foreach relationship
 		// relationship->buildMigration()vc
-    return $file;
-  }
+		return $file;
+	}
 
-  protected function getStub($table, $create)
-  {
-    return  $this->files->get(app_path("Console/Commands/stubs/migration.stub"));
-  }
+	protected function getStub($table, $create)
+	{
+		return  $this->files->get(app_path("Console/Commands/stubs/migration.stub"));
+	}
 
-  protected function populateStub($name, $stub, $table)
-  {
-    $stub = parent::populateStub($name, $stub, $table);
-    $stub = $this->addFields($stub);
-    $stub = $this->addRelationships($stub);
-    return $stub;
-  }
+	protected function populateStub($name, $stub, $table)
+	{
+		$stub = parent::populateStub($name, $stub, $table);
+		$stub = $this->addFields($stub);
+		$stub = $this->addRelationships($stub);
+		return $stub;
+	}
 
-  protected function getMigrationPath() 
+	protected function getMigrationPath() 
 	{
 		return database_path('migrations');
-  }
-  
-  protected function addFields($stub)
+	}
+
+	protected function addFields($stub)
 	{
 		$fieldString = "";
 		foreach ($this->datatype->getFields() as $field) {           
@@ -54,12 +54,12 @@ class DatatypeMigrationCreator extends MigrationCreator
 			$fieldString .= ";\n            ";
 		}
 		return str_replace('DummyFields', $fieldString, $stub);
-  }
-  
-  protected function addRelationships($stub)
-  {
-    return str_replace("DummyRelationships",'',$stub);
-  }
+	}
+
+	protected function addRelationships($stub)
+	{
+		return str_replace("DummyRelationships",'',$stub);
+	}
 
 	protected function buildAttributes(FieldType $field)
 	{
