@@ -13,7 +13,10 @@ class Human extends DataType {
 	{
 		return [
 			Field\Text::create('name')->required(),
-			Field\Dropdown::create('gender')->options(["male", "female"]),
+			Field\Dropdown::create('gender')->options([
+				'm' => "male", 
+				'f' => "female"
+			]),
 		];
 	}
 }

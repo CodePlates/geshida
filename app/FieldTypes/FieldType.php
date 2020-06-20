@@ -2,6 +2,7 @@
 
 namespace App\FieldTypes;
 
+use App\FieldTypes\Relationship\Relationship;
 /**
  * 
  */
@@ -12,6 +13,8 @@ abstract class FieldType
 	public $name;
 	protected $required;
 	protected $dbAttributes;
+	private $relationship;
+	protected $hasRelationship = false;
 
 	function __construct($name)
 	{
@@ -88,5 +91,21 @@ abstract class FieldType
 	public function getDbAttributes()
 	{
 		return $this->dbAttributes;
+	}
+
+	public function hasRelationship()
+	{
+		return $this->hasRelationship;	
+	}
+
+	protected function setRelationship(Relationship $relationship)
+	{
+		$this->relationship = $relationship;
+		$this->hasRelationship = true;
+	}
+
+	public function getRelationship()
+	{
+		return $this->relationship;
 	}
 }

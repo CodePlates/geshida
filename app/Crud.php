@@ -4,6 +4,7 @@ namespace App;
 
 use App\CrudModel;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Route;
 
 class Crud {
 
@@ -14,7 +15,7 @@ class Crud {
 		if (!is_subclass_of($modelClass, CrudModel::class)) {
 			$error = "Unsupported model passed to Crud::register(): ".$modelClass;
 			$error .= ", Expected subclass of CrudModel";
-			throw new Exception($error);
+			throw new \Exception($error);
 		}
 			
 		$datatype = $modelClass::getDataType();	
@@ -27,7 +28,7 @@ class Crud {
 			'slug'			=> $slug,
 		];
 
-		\Route::resource($slug, $controller);
+		Route::resource($slug, $controller);
 	}
 
 	public static function getSlug(string $modelClass)
