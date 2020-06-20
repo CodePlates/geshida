@@ -1,16 +1,19 @@
-<?php 
+<?php
 
 namespace App\FieldTypes\Relationship;
 
+use App\DataTypes\DataType;
+
 class BelongsTo extends Relationship
 {
-	
+
 	protected $foreignKey;
+	protected $datatype;
+	protected $localKey;
 
-	protected $localKey; 
-
-	public function __construct($name, $model, $foreignKey = null, $localKey = null)
+	public function __construct(DataType $datatype, $name, $model, $foreignKey = null, $localKey = null)
 	{
+		$this->datatype = $datatype;
 		$this->name = $name;
 		$this->model = $model;
 		$this->foreignKey = $foreignKey;
@@ -22,5 +25,10 @@ class BelongsTo extends Relationship
 	public function getRelationshipTypeName()
 	{
 		return 'belongsTo';
+	}
+
+	public function getTable()
+	{
+		return $this->datatype->getTableName();
 	}
 }

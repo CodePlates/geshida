@@ -15,7 +15,7 @@ class Post extends DataType {
       Field\Text::create('title')->required(),
       Field\TextArea::create('excerpt'),
       Field\Dropdown::create('human')->options(
-      	new BelongsTo('human', 'App\Human')
+      	new BelongsTo($this, 'human', 'App\Human')
       ),
     ];
   }

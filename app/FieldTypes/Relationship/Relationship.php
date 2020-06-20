@@ -10,7 +10,11 @@ abstract class Relationship
 
 	protected $model;
 
+	protected $table;
+
 	abstract function getRelationshipTypeName();
+
+	abstract function getTable();
 
 	public function getRelationshipArgs()
 	{

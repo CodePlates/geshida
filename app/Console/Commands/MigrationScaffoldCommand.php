@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\DatatypeMigrationCreator;
 use App\FieldTypes\FieldType;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
@@ -27,7 +28,7 @@ class MigrationScaffoldCommand extends Command
 		/**
 	 * The migration creator instance.
 	 *
-	 * @var \Illuminate\Database\Migrations\MigrationCreator
+	 * @var App\DatatypeMigrationCreator
 	 */
 		protected $creator;
 
@@ -38,7 +39,7 @@ class MigrationScaffoldCommand extends Command
 	 *
 	 * @return void
 	 */
-	public function __construct(MigrationCreator $creator, Filesystem $files)
+	public function __construct(DatatypeMigrationCreator $creator, Filesystem $files)
 	{
 		parent::__construct();
 
@@ -56,25 +57,15 @@ class MigrationScaffoldCommand extends Command
 		$dataTypeClass = $this->qualifyDataTypeClass(
 			trim($this->argument('datatype'))
 		);
-		$dataType = $this->resolve($dataTypeClass);
-		$table = $dataType->getTableName(); 
-		$file = $this->creator->create(
-			"create_{$table}_table", 
-			$this->getMigrationPath(), 
-			$table, 
-			true
-		);
-
-		$this->fillMigrationFile($file, $dataType);
+		$dataType = $this->resolve($dataTypeClass);		
+		$file = $this->creator->createFromDatatype($dataType);		
 
 		$fileName = pathinfo($file, PATHINFO_FILENAME);
 		$this->line("<info>Created Migration:</info> {$fileName}");
+
 	}
 
-	protected function getMigrationPath() 
-	{
-		return $this->laravel->databasePath().DIRECTORY_SEPARATOR.'migrations';
-	}
+	
 
 	protected function qualifyDataTypeClass($name)
 	{
@@ -89,43 +80,7 @@ class MigrationScaffoldCommand extends Command
 			throw new \Exception("Unable to find class ".$class_name);
 	}
 
-	protected function fillMigrationFile($file, $dataType)
-	{
-		$fieldString = "";
-		foreach ($dataType->getFields() as $field) {           
-			$fieldString .= "\$table";
-			$fieldString .= $this->buildAttributes($field);
-			$fieldString .= ";\n            ";
-		}
-		$content = $this->files->get($file);
-		$position = strpos($content, '$table->timestamps()');                
-		$content = substr_replace($content, $fieldString, $position, 0);
-
-		$this->files->put($file, $content);
-	}
-
-	protected function buildAttributes(FieldType $field)
-	{
-		$attributeStr = '';		
-		foreach ($field->getDbAttributes() as $attribute => $values) {			
-			$valueStr = "";
-			if (!is_null($values))
-				$valueStr = $this->implodeAttrValues($values);
-			$attributeStr .= "->{$attribute}({$valueStr})";
-		}
-		return $attributeStr;
-	}
-
-	private function implodeAttrValues(array $attrValues)
-	{
-		$result = '';
-		foreach ($attrValues as $key => $value) {
-			if ($key != 0)
-				$result .= ', ';
-			$result .= str_replace('"', "'", json_encode($value));
-		}
-		return $result;
-	}
+	
 
 
 	protected function getArguments()
