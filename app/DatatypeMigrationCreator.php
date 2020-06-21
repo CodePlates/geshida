@@ -36,7 +36,7 @@ class DatatypeMigrationCreator
 
 	public function createFromDatatype(DataType $datatype)
 	{ 
-		$table = $datatype->getTableName().rand(1,1000); 
+		$table = $datatype->getTableName(); 
 		
 		$file = $this->creator->create(
 			"create_{$table}_table", 
@@ -49,11 +49,7 @@ class DatatypeMigrationCreator
 		$stub = $this->createStubFromFile($file);
 		$stub = $this->addFields($fields, $stub);
 		$stub = $this->addRelationships($fields->getRelationships(), $stub);
-		$this->files->put($file, $stub);
-
-		sleep(2);
-		$this->runExtraMigrations($datatype);
-
+		$this->files->put($file, $stub);		
 
 		return $file;
 	}
@@ -88,7 +84,9 @@ class DatatypeMigrationCreator
 		);
 
 		$stub = str_replace("DummyRelationships", $relationshipLines, $stub);
-		$this->files->put($file, $stub);		
+		$this->files->put($file, $stub);	
+
+		return $file;	
 	}
 
 
@@ -99,11 +97,17 @@ class DatatypeMigrationCreator
 		// suggested fix is to inject migration creator
 		// and simply use it. unsure if i can overwrite getStub though
 		// will check in the future 
+		$files = []; 
 		foreach ($datatype->getAllFields() as $field) {  
 			if ($field->hasRelationship()) {
-				$field->getRelationship()->buildExtraMigrations($this);
+				$relationship = $field->getRelationship();
+				$files = array_merge(
+					$files, 
+					$relationship->buildExtraMigrations($this, $datatype) ?? []
+				);
 			}
 		}
+		return $files;
 	}
 
 	

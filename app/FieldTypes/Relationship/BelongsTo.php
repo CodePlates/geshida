@@ -11,7 +11,7 @@ class BelongsTo extends Relationship
 	protected $foreignKey;
 	protected $localKey;
 
-	public function __construct($datatype, $model, $foreignKey = null, $localKey = null)
+	public function __construct($model, $foreignKey = null, $localKey = null)
 	{
 		if (!class_exists($model))
 			throw new \Exception("Model: $model does not exist");
@@ -56,7 +56,7 @@ class BelongsTo extends Relationship
 		return $creator->createFieldLine($this->field);
 	}
 
-	public function buildExtraMigrations(DatatypeMigrationCreator $creator)
+	public function buildExtraMigrations(DatatypeMigrationCreator $creator, $datatype)
 	{
 
 	}

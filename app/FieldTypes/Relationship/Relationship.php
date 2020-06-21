@@ -18,7 +18,7 @@ abstract class Relationship
 
 	abstract function buildForeignKeyMigrations(DatatypeMigrationCreator $creator);
 	abstract function buildMigrationColumn(DatatypeMigrationCreator $creator);
-	abstract function buildExtraMigrations(DatatypeMigrationCreator $creator);
+	abstract function buildExtraMigrations(DatatypeMigrationCreator $creator, $datatype);
 
 	public function getTable() 
 	{
