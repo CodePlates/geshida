@@ -85,8 +85,9 @@ class DropDown extends FieldType
 	public function getValue($dataItem)
 	{
 		if ($this->optionsType == 'belongsTo') {
+			// FIXME: add localkey to relationship or use laravel relationships throughout
 			$localkey = $dataItem->{$this->name}()->getOwnerKeyName();
-			return $dataItem->{$this->name}->{$localkey};
+			return $dataItem->{$this->name}->{$localkey} ?? null;
 		}	else
 			return parent::getValue($dataItem);	
 	}

@@ -3,6 +3,7 @@
 namespace App;
 
 use App\CrudModel;
+use App\FieldsCollection;
 
 class CrudAction {
 
@@ -54,27 +55,28 @@ class CrudAction {
 		$fieldsArr = [];
 		foreach ($fields as $field) {
 			if ($field instanceof FieldType)
-				$fieldsArr[$field->name] = $field;
+				$fieldsArr[] = $field;
 			elseif (is_string($field))
-				$fieldsArr[$field] = $this->datatype()->getFields($field);
+				$fieldsArr[] = $this->datatype()->getField($field);
 		}
-		$this->fields = collect($fieldsArr);		
+		$this->fields = new FieldsCollection($fieldsArr);		
 	}
 
 	public function getFields()
 	{
 		if (isset($this->fields)) 
 			return $this->fields;
-		return $this->datatype()->getFields(); 
+		return $this->datatype()->getAllFields(); 
 	}
 
 	protected function getRelationships()
 	{		
-		return $this->getFields()->filter(function($field){
-			return $field->hasRelationship();
-		})->mapWithKeys(function($field, $key){
-			return [$key => $field->getRelationship()];
-		});	
+		$relationships = [];
+		foreach ($this->getFields() as $field) {
+			if ($field->hasRelationship())
+				$relationships[] = $field->getRelationship();
+		}			
+		return $relationships;
 	}
 
 	public function populateBrowseRelationshipData()
@@ -85,7 +87,7 @@ class CrudAction {
 	public function populateFormRelationshipData()
 	{
 		$data = [];	
-		foreach ($this->getRelationships() as $key => $relationship) {
+		foreach ($this->getRelationships() as $relationship) {
 			$data[$relationship->getName()] = $relationship->loadFormData();
 		}
 				

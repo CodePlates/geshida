@@ -21,6 +21,7 @@ class PostController extends CrudController
 	public function setupIndex($query)
 	{
 		$query->latest();		
+		$this->crud->setFields(['title', 'human']);
 	}
 
 	/**
