@@ -23,7 +23,7 @@
 			@foreach($dataItems as $dataItem)
 				<tr>
 					@foreach($fields as $field)
-						<td>{{ $datatype->getField($field)->browseDisplay($dataItem) }}</td>
+						<td>{{ $field->browseDisplay($dataItem) }}</td>
 					@endforeach
 					<td>
 						<a href="{{ crud_route("edit", $dataItem) }}" class="btn btn-primary">

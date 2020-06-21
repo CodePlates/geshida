@@ -1,8 +1,9 @@
 <?php 
 
-use App\Datatypes\DataType;
-use App\CrudModel;
 use App\Crud;
+use App\CrudModel;
+use App\Datatypes\DataType;
+use App\FieldTypes\FieldType;
 
 if (! function_exists('label')) {
 
@@ -14,9 +15,9 @@ if (! function_exists('label')) {
 
 if (! function_exists('field_label')) {
 
-	function field_label(DataType $datatype, string $fieldName)
+	function field_label(DataType $datatype, FieldType $field)
 	{
-		return __($datatype->getLangKey().'.'.$fieldName);
+		return __($datatype->getLangKey().'.'.$field->getName());
 	}
 }
 

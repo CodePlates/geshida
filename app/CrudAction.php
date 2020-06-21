@@ -51,19 +51,26 @@ class CrudAction {
 
 	public function setFields(array $fields)
 	{
-		$this->fields = $fields;
+		$fieldsArr = [];
+		foreach ($fields as $field) {
+			if ($field instanceof FieldType)
+				$fieldsArr[$field->name] = $field;
+			elseif (is_string($field))
+				$fieldsArr[$field] = $this->datatype()->getFields($field);
+		}
+		$this->fields = collect($fieldsArr);		
 	}
 
 	public function getFields()
 	{
-		if (isset($this->fields)) return $this->fields;
-		return $this->datatype()->getFieldNames(); 
+		if (isset($this->fields)) 
+			return $this->fields;
+		return $this->datatype()->getFields(); 
 	}
 
 	protected function getRelationships()
-	{
-		$fields = $this->datatype()->getFields($this->getFields());
-		return $fields->filter(function($field){
+	{		
+		return $this->getFields()->filter(function($field){
 			return $field->hasRelationship();
 		})->mapWithKeys(function($field, $key){
 			return [$key => $field->getRelationship()];

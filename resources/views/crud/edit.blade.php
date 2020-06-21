@@ -4,12 +4,12 @@
 <div class="container">
 	<h1>{{ label($datatype, 'title_edit') }}</h1>
 
-	<form action="{{ crud_route("update", $dataItem) }}" method="post" @if($datatype->hasFileFields($fields)) enctype="multipart/form-data" @endif>
+	<form action="{{ crud_route("update", $dataItem) }}" method="post" @if($datatype::hasFileFields($fields)) enctype="multipart/form-data" @endif>
 		@method('PUT')
 		@csrf		
 		
-		@foreach($fields as $field)	
-			@includeFirst(['formfields.'.$datatype->getFormField($field), 'formfields.text'])	
+		@foreach($fields as $fieldName => $field)	
+			@includeFirst(['formfields.'.$field->getFormField(), 'formfields.text'])	
 		@endforeach
 
 		<div class="buttons">

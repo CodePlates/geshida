@@ -1,13 +1,14 @@
 <div class="form-group">
-	<label for="{{ $field }}">{{ field_label($datatype, $field) }}</label>
-	<select class="form-control" name="{{ $field }}">
-		@foreach($datatype->getField($field)->getOptions($relationshipData) as $key => $value)
+	<label for="{{ $fieldName }}">{{ field_label($datatype, $field) }}</label>
+	<select class="form-control" name="{{ $fieldName }}">
+		<option value=""></option>
+		@foreach($field->getOptions($relationshipData) as $key => $value)
 			@php
-				$dv = $dataItem->{$field};
+				$dv = $dataItem->{$fieldName};
 				if (is_object($dv)) 
-					$dv = $dataItem->{$field.'_id'};
+					$dv = $dataItem->{$fieldName.'_id'};
 			@endphp
-			<option value="{{ $key }}" {{ old($field, $dv) == $key ? 'selected' : '' }}>{{ $value->displayName }}</option>			
+			<option value="{{ $key }}" {{ old($fieldName, $dv) == $key ? 'selected' : '' }}>{{ $value->displayName }}</option>			
 		@endforeach
 	</select>
 </div>

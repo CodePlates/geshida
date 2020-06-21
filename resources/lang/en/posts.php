@@ -12,6 +12,7 @@ return [
 	//Fields
 	'title' => 'Title',
 	'excerpt' => 'Excerpt',
+	'human' => 'Human',
 	
 
 
