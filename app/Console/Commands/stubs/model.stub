@@ -7,8 +7,7 @@ use App\DataTypes\DummyDatatype as DummyDatatypeDatatype;
 
 class DummyClass extends CrudModel
 {    
-	protected static $datatype = DummyDatatypeDatatype::class;
-	
+	protected static $datatype = DummyDatatypeDatatype::class;	
 DummyRelationship
 DummyDisplayName
 }

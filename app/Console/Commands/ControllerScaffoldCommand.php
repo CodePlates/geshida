@@ -12,7 +12,9 @@ class ControllerScaffoldCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'scaffold:controller {datatype : The datatype class name}';
+    protected $signature = 'scaffold:controller 
+        {datatype : The datatype class name}
+        {--force}';
 
     /**
      * The console command description.

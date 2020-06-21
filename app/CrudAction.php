@@ -56,8 +56,11 @@ class CrudAction {
 		foreach ($fields as $field) {
 			if ($field instanceof FieldType)
 				$fieldsArr[] = $field;
-			elseif (is_string($field))
-				$fieldsArr[] = $this->datatype()->getField($field);
+			elseif (is_string($field)) {
+				$fieldObj = $this->datatype()->getField($field);
+				if ($fieldObj)
+					$fieldsArr[] = $fieldObj;
+			}
 		}
 		$this->fields = new FieldsCollection($fieldsArr);		
 	}
@@ -72,9 +75,9 @@ class CrudAction {
 	protected function getRelationships()
 	{		
 		$relationships = [];
-		foreach ($this->getFields() as $field) {
+		foreach ($this->getFields() as $key => $field) {
 			if ($field->hasRelationship())
-				$relationships[] = $field->getRelationship();
+				$relationships[$key] = $field->getRelationship();
 		}			
 		return $relationships;
 	}
@@ -87,8 +90,8 @@ class CrudAction {
 	public function populateFormRelationshipData()
 	{
 		$data = [];	
-		foreach ($this->getRelationships() as $relationship) {
-			$data[$relationship->getName()] = $relationship->loadFormData();
+		foreach ($this->getRelationships() as $key => $relationship) {
+			$data[$key] = $relationship->loadFormData();
 		}
 				
 		$this->appendData(["relationshipData" => $data]);

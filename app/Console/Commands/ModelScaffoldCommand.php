@@ -6,6 +6,7 @@ use App\FieldTypes\Relationship\Relationship;
 use Illuminate\Console\Command;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputArgument;
+use Illuminate\Filesystem\Filesystem;
 
 class ModelScaffoldCommand extends GeneratorCommand
 {
@@ -14,7 +15,9 @@ class ModelScaffoldCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'scaffold:model {datatype : The datatype class name}';
+    protected $signature = 'scaffold:model 
+        {datatype : The datatype class name}  
+        {--force}';
 
     /**
      * The console command description.
@@ -25,7 +28,6 @@ class ModelScaffoldCommand extends GeneratorCommand
 
     protected $type = 'Model';
     protected $datatype;
-
 
     /**
      * Execute the console command.
@@ -64,7 +66,7 @@ class ModelScaffoldCommand extends GeneratorCommand
         $relationshipStr = '';
         $dataTypeClass = $this->qualifyDataTypeClass($datatypeName);
         $dataType = $this->resolve($dataTypeClass);
-        $fields = $dataType->getFields();
+        $fields = $dataType->getAllFields();
         $fields = $fields->filter(function ($field) {
             return $field->hasRelationship();
         });
@@ -72,7 +74,7 @@ class ModelScaffoldCommand extends GeneratorCommand
         if ($fields->isNotEmpty()) {
             foreach ($fields as $key => $field) {
                 $relationship = $field->getRelationship();
-                $content = "\tpublic function {$relationship->getName()}()\n";
+                $content = "\n\tpublic function {$field->name}()\n";
                 $content .= "\t{\n\t\treturn \$this->";
                 $content .= sprintf("%s('%s'%s);\n\t}\n",
                     $relationship->getRelationshipTypeName(),
@@ -89,7 +91,7 @@ class ModelScaffoldCommand extends GeneratorCommand
     }
 
     protected function addDisplayName($stub, $datatype)
-    {
+    {        
         $content = "\tpublic function getDisplayNameAttribute()\n";
         $content .= "\t{\n\t\treturn \$this->";
         $content .= $datatype->getDisplayNameField().";\n\t}";

@@ -11,7 +11,7 @@ class ScaffoldCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'scaffold:common {datatype : The datatype class name}';
+    protected $signature = 'scaffold:common {datatype : The datatype class name} {--force}';
 
     /**
      * The console command description.
@@ -38,9 +38,14 @@ class ScaffoldCommand extends Command
     public function handle()
     {
         $datatype = trim($this->argument('datatype'));
-        $this->call('scaffold:migration', ['datatype' => $datatype]);
-        $this->call('scaffold:model', ['datatype' => $datatype]);
-        $this->call('scaffold:controller', ['datatype' => $datatype]);
-        $this->call('scaffold:lang', ['datatype' => $datatype]);
+        $fullArgs = [
+            'datatype' => $datatype,
+            '--force' => $this->option('force'),
+        ];
+
+        $this->call('scaffold:migration', compact('datatype'));
+        $this->call('scaffold:model', $fullArgs);
+        $this->call('scaffold:controller', $fullArgs);
+        $this->call('scaffold:lang', $fullArgs);
     }
 }

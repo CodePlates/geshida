@@ -2,17 +2,33 @@
 
 namespace App\FieldTypes\Relationship;
 
+use App\FieldTypes\FieldType;
+use App\DatatypeMigrationCreator;
+
 abstract class Relationship 
 {
 	protected $name;
 	private $relationshipArgs = [];
 	// protected $relatedModel;
 	protected $model;
-	protected $table;
+	protected $table;	
+	protected $field;
 
 	abstract function getRelationshipTypeName();
 
-	abstract function getTable();
+	abstract function buildForeignKeyMigrations(DatatypeMigrationCreator $creator);
+	abstract function buildMigrationColumn(DatatypeMigrationCreator $creator);
+	abstract function buildExtraMigrations(DatatypeMigrationCreator $creator);
+
+	public function getTable() 
+	{
+		return $this->table;
+	}
+
+	public function setField(FieldType $field)
+	{
+		$this->field = $field;
+	}
 
 	public function getRelationshipArgs()
 	{

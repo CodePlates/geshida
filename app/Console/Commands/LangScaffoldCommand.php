@@ -13,7 +13,9 @@ class LangScaffoldCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'scaffold:lang {datatype : The datatype class name}';
+    protected $signature = 'scaffold:lang 
+        {datatype : The datatype class name} 
+        {--force}';
 
     /**
      * The console command description.
@@ -71,7 +73,7 @@ class LangScaffoldCommand extends Command
     protected function generateFieldLabels($dataType)
     {
         $fieldLabels = "";
-        foreach ($dataType->getFieldNames() as $fieldName) {
+        foreach ($dataType->getAllFields()->getNames() as $fieldName) {
             $label = Str::title(str_replace('_', ' ', $fieldName));
             $fieldLabels .= "'$fieldName' => '$label',\n\t";
         }

@@ -61,9 +61,8 @@ abstract class DataType {
 
   public function getDisplayNameField()
   {
-    return Arr::first($this->getFieldNames(), function ($fieldName) {
+    return $this->fields->getNames()->first(function ($fieldName) {
       return in_array(strtolower($fieldName), ['name', 'title']);
-    }, 'id');
-    
+    }, 'id');    
   }
 }

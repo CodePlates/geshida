@@ -108,6 +108,7 @@ abstract class FieldType
 
 	protected function setRelationship(Relationship $relationship)
 	{
+		$relationship->setField($this);
 		$this->relationship = $relationship;
 		$this->hasRelationship = true;
 	}

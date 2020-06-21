@@ -4,11 +4,15 @@ namespace App;
 
 use App\DataTypes\DataType;
 use App\FieldTypes\FieldType;
+use App\FieldTypes\Relationship\BelongsTo;
 use Illuminate\Database\Migrations\MigrationCreator;
+
 
 class DatatypeMigrationCreator extends MigrationCreator
 {
 	protected $datatype;
+
+	protected $tab = '    ';
 
 	public function createFromDatatype(DataType $datatype)
 	{  
@@ -47,18 +51,44 @@ class DatatypeMigrationCreator extends MigrationCreator
 
 	protected function addFields($stub)
 	{
-		$fieldString = "";
-		foreach ($this->datatype->getFields() as $field) {           
-			$fieldString .= "\$table";
-			$fieldString .= $this->buildAttributes($field);
-			$fieldString .= ";\n            ";
+		$fieldLines = "";
+		foreach ($this->datatype->getAllFields() as $field) {  
+			if ($field->hasRelationship()) 
+				$fieldLines .= $field->getRelationship()->buildMigrationColumn($this);
+			else      
+				$fieldLines .= $this->createFieldLine($field);
 		}
-		return str_replace('DummyFields', $fieldString, $stub);
+		return str_replace('DummyFields', $fieldLines, $stub);
+	}
+
+	public function createFieldLine(FieldType $field)
+	{		
+		$fieldLine = "\$table";
+		$fieldLine .= $this->buildAttributes($field);
+		$fieldLine .= ";\n".str_repeat($this->tab, 3);
+		return $fieldLine;
+	}
+
+	public function createForeignKeyString($column, $table, $onUpdate = 'cascade', $onDelete = 'cascade')
+	{		
+		$str = "\n\n".str_repeat($this->tab, 3);
+		$str .= "\$table->foreign('%s')->references('id')->on('%s')\n";
+      $str .= str_repeat($this->tab, 4)."->onUpdate('%s')\n";
+      $str .= str_repeat($this->tab, 4)."->onDelete('%s');";
+      return sprintf($str, $column, $table, $onUpdate, $onDelete);
 	}
 
 	protected function addRelationships($stub)
 	{
-		return str_replace("DummyRelationships",'',$stub);
+		$relationshipLines = '';
+		foreach ($this->datatype->getAllFields() as $field) {  
+			if ($field->hasRelationship()) {
+				$relationshipLines .= $field
+					->getRelationship()
+					->buildForeignKeyMigrations($this);
+			}
+		}
+		return str_replace("DummyRelationships", $relationshipLines, $stub);
 	}
 
 	protected function buildAttributes(FieldType $field)

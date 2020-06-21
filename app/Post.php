@@ -7,11 +7,16 @@ use App\DataTypes\Post as PostDatatype;
 
 class Post extends CrudModel
 {    
-	protected static $datatype = PostDatatype::class;
-	
+	protected static $datatype = PostDatatype::class;	
+
 	public function human()
 	{
 		return $this->belongsTo('App\Human');
+	}
+
+	public function tags()
+	{
+		return $this->belongsToMany('App\Tag');
 	}
 
 	public function getDisplayNameAttribute()

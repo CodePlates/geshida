@@ -3,18 +3,18 @@
 namespace App\FieldTypes\Relationship;
 
 use App\DataTypes\DataType;
+use App\DatatypeMigrationCreator;
 
 class BelongsTo extends Relationship
 {
 
 	protected $foreignKey;
-	protected $datatype;
 	protected $localKey;
 
-	public function __construct(DataType $datatype, $name, $model, $foreignKey = null, $localKey = null)
+	public function __construct($model, $foreignKey = null, $localKey = null)
 	{
-		$this->datatype = $datatype;
-		$this->name = $name;
+		if (!class_exists($model))
+			throw new \Exception("Model: $model does not exist");
 		$this->model = $model;
 		$this->foreignKey = $foreignKey;
 		$this->localKey = $localKey;
@@ -25,12 +25,7 @@ class BelongsTo extends Relationship
 	public function getRelationshipTypeName()
 	{
 		return 'belongsTo';
-	}
-
-	public function getTable()
-	{
-		return $this->datatype->getTableName();
-	}
+	}	
 
 	public function loadFormData()
 	{
@@ -39,7 +34,32 @@ class BelongsTo extends Relationship
 
 	public function loadBrowseData($collection)
 	{
-		$collection->load($this->getName());
+		$collection->load($this->field->getName());
 		return $collection;
 	}
+
+	protected function resolveModel()
+	{
+		return new $this->model;
+	}
+
+	public function buildForeignKeyMigrations(DatatypeMigrationCreator $creator)
+	{
+		return $creator->createForeignKeyString(
+			$this->field->getDbColumnName(), 
+			$this->resolveModel()->getTable()
+		);
+	}
+
+	public function buildMigrationColumn(DatatypeMigrationCreator $creator)
+	{
+		return $creator->createFieldLine($this->field);
+	}
+
+	public function buildExtraMigrations(DatatypeMigrationCreator $creator)
+	{
+
+	}
+
+
 }

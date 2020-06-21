@@ -19,6 +19,10 @@ class CreatePostsTable extends Migration
             $table->text('excerpt')->nullable();
             $table->unsignedBigInteger('human_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('human_id')->references('id')->on('humans')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 

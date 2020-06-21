@@ -30,4 +30,16 @@ class FieldsCollection extends Collection
 	{
 		return $this->whereInstanceOf(FileFieldType::class);
 	}
+
+	public function getNames()
+	{
+		$fields = collect($this->all());
+		return $fields->keys();
+	}
+
+	public function keys()
+	{
+		return $this->getNames();
+	}
+
 }
