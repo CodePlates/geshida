@@ -122,4 +122,9 @@ abstract class FieldType
 		return e($dataItem->{$this->getName()});
 	}
 
+	public function getValue($dataItem)
+	{
+		return $dataItem->{$this->name};
+	}
+
 }

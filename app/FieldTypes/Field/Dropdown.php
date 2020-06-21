@@ -79,6 +79,15 @@ class DropDown extends FieldType
 
 	public function browseDisplay($dataItem)
 	{
-		return e($dataItem->{$this->getName()}->displayName);
+		return e($dataItem->{$this->getName()}->displayName ?? '');
+	}
+
+	public function getValue($dataItem)
+	{
+		if ($this->optionsType == 'belongsTo') {
+			$localkey = $dataItem->{$this->name}()->getOwnerKeyName();
+			return $dataItem->{$this->name}->{$localkey};
+		}	else
+			return parent::getValue($dataItem);	
 	}
 }
