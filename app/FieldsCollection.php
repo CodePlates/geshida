@@ -37,6 +37,16 @@ class FieldsCollection extends Collection
 		return $fields->keys();
 	}
 
+	public function getRelationships()
+	{
+		$fields = collect($this->all());
+		return $fields->filter(function($field){
+			return $field->hasRelationship();
+		})->map(function($field, $key){
+			return $field->getRelationship();
+		});
+	}
+
 	public function keys()
 	{
 		return $this->getNames();

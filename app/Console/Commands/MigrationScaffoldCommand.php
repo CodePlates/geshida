@@ -53,7 +53,7 @@ class MigrationScaffoldCommand extends Command
 	 * @return mixed
 	 */
 	public function handle()
-	{        
+	{     
 		$dataTypeClass = $this->qualifyDataTypeClass(
 			trim($this->argument('datatype'))
 		);
@@ -62,6 +62,8 @@ class MigrationScaffoldCommand extends Command
 
 		$fileName = pathinfo($file, PATHINFO_FILENAME);
 		$this->line("<info>Created Migration:</info> {$fileName}");
+
+		// $this->creator->runExtraMigrations($dataType);
 
 	}
 

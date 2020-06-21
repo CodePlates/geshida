@@ -13,6 +13,7 @@ return [
 	'title' => 'Title',
 	'excerpt' => 'Excerpt',
 	'human' => 'Human',
+	'tags' => 'Tags',
 	
 
 

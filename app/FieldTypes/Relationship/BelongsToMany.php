@@ -12,10 +12,10 @@ class BelongsToMany extends Relationship
 	protected $foreignPivotKey;
 	protected $localPivotKey;
 
-	public function __construct($model, $tableName = null, $foreignPivotKey = null, $localPivotKey = null)
+	public function __construct($model, $tableName, $foreignPivotKey = null, $localPivotKey = null)
 	{
 		$this->model = $model;
-		$this->tableName;
+		$this->tableName = $tableName;
 		$this->foreignPivotKey = $foreignPivotKey;
 		$this->localPivotKey = $localPivotKey;
 
@@ -50,6 +50,6 @@ class BelongsToMany extends Relationship
 
 	public function buildExtraMigrations(DatatypeMigrationCreator $creator)
 	{
-
+		$creator->createPivotTableMigration($this->tableName);
 	}
 }

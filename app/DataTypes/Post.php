@@ -17,8 +17,11 @@ class Post extends DataType {
       Field\Dropdown::create('human')->options(
       	new BelongsTo('App\Human')
       ),
+      Field\Dropdown::create('luman')->options(
+        new BelongsTo('App\Human')
+      ),
       Field\Tags::create('tags')->options(
-        new BelongsToMany('App\Tag')
+        new BelongsToMany('App\Tag', 'post_tags')
       ),
     ];
   }

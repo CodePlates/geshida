@@ -4,68 +4,126 @@ namespace App;
 
 use App\DataTypes\DataType;
 use App\FieldTypes\FieldType;
+use Illuminate\Filesystem\Filesystem;
 use App\FieldTypes\Relationship\BelongsTo;
 use Illuminate\Database\Migrations\MigrationCreator;
 
 
-class DatatypeMigrationCreator extends MigrationCreator
+class DatatypeMigrationCreator 
 {
-	protected $datatype;
-
 	protected $tab = '    ';
+
+	protected $isPivot;
+
+	protected $creator;
+
+	protected $files;
+
+	public function __construct(Filesystem $files, MigrationCreator $creator)
+	{
+		$this->creator = $creator;
+		$this->files = $files;
+	}
+
+	protected function createStubFromFile($file)
+	{
+		$contents = $this->files->get($file);
+		return str_replace(
+			'$table->timestamps();', 
+			'DummyFields DummyRelationships', 
+			$contents
+		);
+
+	}
 
 	public function createFromDatatype(DataType $datatype)
 	{  
-		$this->datatype = $datatype;  
-		$table = $datatype->getTableName(); 
-		$file = parent::create(
+		$this->isPivot = false;  
+		$table = $datatype->getTableName().rand(1,1000); 
+		$file = $this->creator->create(
 			"create_{$table}_table", 
 			$this->getMigrationPath(), 
 			$table, 
 			true
 		);
 
+		$fields = $datatype->getAllFields();		
 
-		//foreach relationship
-		// relationship->buildMigration()vc
+		$stub = $this->createStubFromFile($file);
+		$stub = $this->addFields($fields, $stub);
+		$stub = $this->addRelationships($fields->getRelationships(), $stub);
+
+		$this->files->put($file, $stub);
 		return $file;
 	}
 
-	protected function getStub($table, $create)
+	public function createPivotTableMigration($table)
 	{
-		return  $this->files->get(app_path("Console/Commands/stubs/migration.stub"));
+		$this->isPivot = true;
+
+		$file = parent::create(
+			"create_{$table}_table", 
+			$this->getMigrationPath(), 
+			$table, 
+			true
+		);
 	}
 
-	protected function populateStub($name, $stub, $table)
+
+
+	public function runExtraMigrations($datatype)
 	{
-		$stub = parent::populateStub($name, $stub, $table);
-		$stub = $this->addFields($stub);
-		$stub = $this->addRelationships($stub);
-		return $stub;
+		// NB: has to run last coz may overwrite datatype
+		// suggested fix is to inject migration creator
+		// and simply use it. unsure if i can overwrite getStub though
+		// will check in the future 
+		foreach ($datatype->getAllFields() as $field) {  
+			if ($field->hasRelationship()) {
+				$field->getRelationship()->buildExtraMigrations($this);
+			}
+		}
 	}
+
+	
+
+	// protected function populateStub($stub, $table)
+	// {
+	// 	if (!$this->isPivot) {
+	// 		$stub = $this->addFields($stub);
+	// 		$stub = $this->addRelationships($stub);
+	// 	}
+	// 	return $stub;
+	// }
 
 	protected function getMigrationPath() 
 	{
 		return database_path('migrations');
 	}
 
-	protected function addFields($stub)
+	protected function addFields($fields, $stub)
 	{
 		$fieldLines = "";
-		foreach ($this->datatype->getAllFields() as $field) {  
+		foreach ($fields as $field) {  
 			if ($field->hasRelationship()) 
 				$fieldLines .= $field->getRelationship()->buildMigrationColumn($this);
 			else      
 				$fieldLines .= $this->createFieldLine($field);
-		}
+		}	
+		$fieldLines .= $this->createDbColumnLine(["timestamps" => null], true);	
 		return str_replace('DummyFields', $fieldLines, $stub);
 	}
 
 	public function createFieldLine(FieldType $field)
 	{		
+		return $this->createDbColumnLine($field->getDbAttributes());
+	}
+
+	public function createDbColumnLine(array $dbAttributes, $last=false)
+	{
 		$fieldLine = "\$table";
-		$fieldLine .= $this->buildAttributes($field);
-		$fieldLine .= ";\n".str_repeat($this->tab, 3);
+		$fieldLine .= $this->buildAttributes($dbAttributes).";";
+		if (!$last) 
+			$fieldLine .= "\n".str_repeat($this->tab, 3);
 		return $fieldLine;
 	}
 
@@ -78,23 +136,20 @@ class DatatypeMigrationCreator extends MigrationCreator
       return sprintf($str, $column, $table, $onUpdate, $onDelete);
 	}
 
-	protected function addRelationships($stub)
+	protected function addRelationships($relationships, $stub)
 	{
 		$relationshipLines = '';
-		foreach ($this->datatype->getAllFields() as $field) {  
-			if ($field->hasRelationship()) {
-				$relationshipLines .= $field
-					->getRelationship()
-					->buildForeignKeyMigrations($this);
-			}
+		foreach ($relationships as $relationship) { 			
+				$relationshipLines .= $relationship
+					->buildForeignKeyMigrations($this);			
 		}
 		return str_replace("DummyRelationships", $relationshipLines, $stub);
 	}
 
-	protected function buildAttributes(FieldType $field)
+	protected function buildAttributes(array $dbAttributes)
 	{
 		$attributeStr = '';		
-		foreach ($field->getDbAttributes() as $attribute => $values) {			
+		foreach ($dbAttributes as $attribute => $values) {			
 			$valueStr = "";
 			if (!is_null($values))
 				$valueStr = $this->implodeAttrValues($values);

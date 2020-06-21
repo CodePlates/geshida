@@ -20,10 +20,10 @@ class Tags extends FieldType
 
 	public function getOptions($relationshipData = null)
 	{
-		if ($this->optionsType == 'list')
-			return $this->listOptions;
+		// if ($this->optionsType == 'list')
+		// 	return $this->listOptions;
 		
-		if ($this->optionsType == 'belongsTo' && !is_null($relationshipData))
+		if (!is_null($relationshipData))
 			return $relationshipData[$this->getName()]->keyBy('id');
 
 		return [];
@@ -41,13 +41,8 @@ class Tags extends FieldType
 
 	public function saveAction($model, $value)
 	{
-		if ($this->optionsType == 'belongsTo') {
-			$relationship = $this->getRelationship();
-			$valueObj = $relationship->getRelatedModel()::find($value);
-			$model->{$this->getName()}()->associate($valueObj);
-		} else {
-			$model->{$this->getName()} = $value;
-		}
+		$relationship = $this->getRelationship();
+		$model->{$this->getName()}()->sync($value);		
 	}
 
 	public function getFormField()
@@ -57,7 +52,11 @@ class Tags extends FieldType
 
 	public function browseDisplay($dataItem)
 	{
-		return e($dataItem->{$this->getName()}->displayName ?? '');
+		$tags = $dataItem->{$this->getName()};
+		$tagStr = $tags->map(function($tag){
+			return $tag->displayName;
+		})->join(', ');
+		return e($tagStr);
 	}
 
 	public function getValue($dataItem)
