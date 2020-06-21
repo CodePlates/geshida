@@ -119,7 +119,7 @@ abstract class FieldType
 
 	public function browseDisplay($dataItem)
 	{
-		return $dataItem->{$this->getName()};
+		return e($dataItem->{$this->getName()});
 	}
 
 }

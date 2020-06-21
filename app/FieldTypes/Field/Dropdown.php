@@ -79,6 +79,6 @@ class DropDown extends FieldType
 
 	public function browseDisplay($dataItem)
 	{
-		return $dataItem->{$this->getName()}->displayName;
+		return e($dataItem->{$this->getName()}->displayName);
 	}
 }
