@@ -15,13 +15,13 @@ class Post extends DataType {
       Field\Text::create('title')->required(),
       Field\TextArea::create('excerpt'),
       Field\Dropdown::create('human')->options(
-      	new BelongsTo('App\Human')
+      	new BelongsTo($this, 'App\Human')
       ),
       Field\Dropdown::create('luman')->options(
-        new BelongsTo('App\Human')
+        new BelongsTo($this, 'App\Human')
       ),
       Field\Tags::create('tags')->options(
-        new BelongsToMany('App\Tag', 'post_tags')
+        new BelongsToMany($this, 'App\Tag', 'post_tags')
       ),
     ];
   }

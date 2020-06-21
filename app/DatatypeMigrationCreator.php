@@ -13,8 +13,6 @@ class DatatypeMigrationCreator
 {
 	protected $tab = '    ';
 
-	protected $isPivot;
-
 	protected $creator;
 
 	protected $files;
@@ -37,9 +35,9 @@ class DatatypeMigrationCreator
 	}
 
 	public function createFromDatatype(DataType $datatype)
-	{  
-		$this->isPivot = false;  
+	{ 
 		$table = $datatype->getTableName().rand(1,1000); 
+		
 		$file = $this->creator->create(
 			"create_{$table}_table", 
 			$this->getMigrationPath(), 
@@ -47,26 +45,50 @@ class DatatypeMigrationCreator
 			true
 		);
 
-		$fields = $datatype->getAllFields();		
-
+		$fields = $datatype->getAllFields();	
 		$stub = $this->createStubFromFile($file);
 		$stub = $this->addFields($fields, $stub);
 		$stub = $this->addRelationships($fields->getRelationships(), $stub);
-
 		$this->files->put($file, $stub);
+
+		sleep(2);
+		$this->runExtraMigrations($datatype);
+
+
 		return $file;
 	}
 
-	public function createPivotTableMigration($table)
+	public function createPivotTableMigration($table, $localKey, $foreignKey, $localTable, $foreignTable)
 	{
-		$this->isPivot = true;
-
-		$file = parent::create(
+		$file = $this->creator->create(
 			"create_{$table}_table", 
 			$this->getMigrationPath(), 
 			$table, 
 			true
 		);
+
+		$stub = $this->createStubFromFile($file);
+		
+		$fieldLines = $this->createDbColumnLine(
+			["unsignedBigInteger" => [$localKey]]
+		);	
+		$fieldLines .= $this->createDbColumnLine(
+			["unsignedBigInteger" => [$foreignKey]]
+		);	
+		// $stub = $this->addRelationships($fields->getRelationships(), $stub);
+		$stub = str_replace('DummyFields', $fieldLines, $stub);
+
+		$relationshipLines = $this->createForeignKeyString(
+			$localKey, 
+			$localTable
+		);
+		$relationshipLines .= $this->createForeignKeyString(
+			$foreignKey, 
+			$foreignTable
+		);
+
+		$stub = str_replace("DummyRelationships", $relationshipLines, $stub);
+		$this->files->put($file, $stub);		
 	}
 
 
