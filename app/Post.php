@@ -14,5 +14,8 @@ class Post extends CrudModel
 		return $this->belongsTo('App\Human');
 	}
 
-
+	public function getDisplayNameAttribute()
+	{
+		return $this->title;
+	}
 }

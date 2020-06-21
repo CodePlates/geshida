@@ -57,7 +57,7 @@ class MigrationScaffoldCommand extends Command
 		$dataTypeClass = $this->qualifyDataTypeClass(
 			trim($this->argument('datatype'))
 		);
-		$dataType = $this->resolve($dataTypeClass);		
+		$dataType = $this->resolve($dataTypeClass);				
 		$file = $this->creator->createFromDatatype($dataType);		
 
 		$fileName = pathinfo($file, PATHINFO_FILENAME);

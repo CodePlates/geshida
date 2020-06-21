@@ -60,5 +60,30 @@ class CrudAction {
 		return $this->datatype()->getFieldNames(); 
 	}
 
+	protected function getRelationships()
+	{
+		$fields = $this->datatype()->getFields($this->getFields());
+		return $fields->filter(function($field){
+			return $field->hasRelationship();
+		})->mapWithKeys(function($field, $key){
+			return [$key => $field->getRelationship()];
+		});	
+	}
+
+	public function populateBrowseRelationshipData()
+	{
+
+	}
+
+	public function populateFormRelationshipData()
+	{
+		$data = [];	
+		foreach ($this->getRelationships() as $key => $relationship) {
+			$data[$relationship->getName()] = $relationship->loadFormData();
+		}
+				
+		$this->appendData(["relationshipData" => $data]);
+	}
+
 
 }

@@ -19,7 +19,7 @@ class BelongsTo extends Relationship
 		$this->foreignKey = $foreignKey;
 		$this->localKey = $localKey;
 
-		$this->setRelationshipArgs([$foreignKey, $localKey]);
+		$this->setRelationshipArgs([$foreignKey, $localKey]);		
 	}
 
 	public function getRelationshipTypeName()
@@ -30,5 +30,16 @@ class BelongsTo extends Relationship
 	public function getTable()
 	{
 		return $this->datatype->getTableName();
+	}
+
+	public function loadFormData()
+	{
+		return $this->model::all();
+	}
+
+	public function loadBrowseData($collection)
+	{
+		$collection->load($this->getName());
+		return $collection;
 	}
 }

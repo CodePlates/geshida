@@ -45,6 +45,7 @@ class CrudController extends Controller
         
         $model = $this->crud->getModel();
         $this->crud->appendData(['dataItem' => new $model]);
+        $this->crud->populateFormRelationshipData();
         return view()->first(['crud.create'], $this->crud->getData());
     }
 
@@ -102,6 +103,7 @@ class CrudController extends Controller
         }
         
         $this->crud->appendData(compact('dataItem'));
+        $this->crud->populateFormRelationshipData();
         return view()->first(['crud.edit'], $this->crud->getData());
     }
 

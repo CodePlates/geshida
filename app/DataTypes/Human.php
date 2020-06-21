@@ -11,6 +11,7 @@ class Human extends DataType {
 
 	protected function build()
 	{
+		
 		return [
 			Field\Text::create('name')->required(),
 			Field\Dropdown::create('gender')->options([

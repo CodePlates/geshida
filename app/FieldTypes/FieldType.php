@@ -13,13 +13,13 @@ abstract class FieldType
 	public $name;
 	protected $required;
 	protected $dbAttributes;
+	protected $model;
 	private $relationship;
 	protected $hasRelationship = false;
 
 	function __construct($name)
 	{
 		$this->name = $name;
-		$this->addNameDbAttribute();
 		$this->required(false);
 	}
 
@@ -69,18 +69,18 @@ abstract class FieldType
 		return $this;
 	}
 
-	protected function addNameDbAttribute()
+	protected function getNameDbAttribute()
 	{
 		$colType = $this->getDbColumnType();
 		$attrVal = [$this->getDbColumnName()];
+		
 		if (is_array($colType)) {
 			$args = $colType;
 			$colType = $args[0];
 			unset($args[0]);
 			$attrVal = array_merge($attrVal, $args);
 		}
-
-		$this->addDbAttribute($colType, $attrVal);
+		return [$colType => $attrVal];	
 	}
 
 	protected function addDbAttribute($attribute, array $values = null)
@@ -94,8 +94,11 @@ abstract class FieldType
 	}
 
 	public function getDbAttributes()
-	{
-		return $this->dbAttributes;
+	{		
+		return array_merge(
+			$this->getNameDbAttribute(),
+			$this->dbAttributes
+		);
 	}
 
 	public function hasRelationship()
@@ -113,4 +116,10 @@ abstract class FieldType
 	{
 		return $this->relationship;
 	}
+
+	public function browseDisplay($dataItem)
+	{
+		return $dataItem->{$this->getName()};
+	}
+
 }

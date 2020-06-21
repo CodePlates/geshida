@@ -11,6 +11,7 @@ class Post extends DataType {
 
   protected function build()
   {
+    // dd($this);
     return [
       Field\Text::create('title')->required(),
       Field\TextArea::create('excerpt'),

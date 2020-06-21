@@ -12,6 +12,7 @@ abstract class DataType {
   protected $table;
   protected $langKey;
   protected $slug;
+  protected $displayNameField;
 
   function __construct()
   {
@@ -83,5 +84,13 @@ abstract class DataType {
       return $this->langKey;
 
     return $this->getTableName();
+  }
+
+  public function getDisplayNameField()
+  {
+    return Arr::first($this->getFieldNames(), function ($fieldName) {
+      return in_array(strtolower($fieldName), ['name', 'title']);
+    }, 'id');
+    
   }
 }

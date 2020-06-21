@@ -4,12 +4,10 @@ namespace App\FieldTypes\Relationship;
 
 abstract class Relationship 
 {
-	private $relationshipArgs;
-
 	protected $name;
-
+	private $relationshipArgs = [];
+	// protected $relatedModel;
 	protected $model;
-
 	protected $table;
 
 	abstract function getRelationshipTypeName();
@@ -26,7 +24,7 @@ abstract class Relationship
 		return $this->name;
 	}
 
-	public function getModel()
+	public function getRelatedModel()
 	{
 		return $this->model;
 	}
@@ -38,5 +36,19 @@ abstract class Relationship
 				$relationshipArgs[] = $arg;
 		}
 	}
+
+	public function setModel($model)
+	{
+		$this->model = $model;
+	}
+
+	public function getModel()
+	{
+		return $this->model;
+	}
+
+	abstract function loadBrowseData($collection);
+
+	abstract function loadFormData();
 
 }

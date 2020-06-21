@@ -41,12 +41,7 @@ class ModelScaffoldCommand extends GeneratorCommand
     protected function getStub()
     {
         return __DIR__ . '/stubs/model.stub';
-    }
-
-    protected function getRelationshipStub()
-    {
-        return __DIR__ . '/stubs/relationship.stub';
-    }
+    }    
 
     protected function getArguments()
     {
@@ -77,32 +72,32 @@ class ModelScaffoldCommand extends GeneratorCommand
         if ($fields->isNotEmpty()) {
             foreach ($fields as $key => $field) {
                 $relationship = $field->getRelationship();
-                $content = $this->files->get($this->getRelationshipStub());
-
-                $replacements = [
-                    'DummyName' => $relationship->getName(),
-                    'DummyRelationType' => $relationship->getRelationshipTypeName(),
-                    'DummyModel' => $relationship->getModel(),
-                    'DummyRelationArgs' => $this->buildRelationshipArgs(
-                        $relationship->getRelationshipArgs() ?? []
-                    ),
-                ];
-
-                $content = str_replace(
-                    array_keys($replacements),
-                    array_values($replacements),
-                    $content
-                );
+                $content = "\tpublic function {$relationship->getName()}()\n";
+                $content .= "\t{\n\t\treturn \$this->";
+                $content .= sprintf("%s('%s'%s);\n\t}\n",
+                    $relationship->getRelationshipTypeName(),
+                    $relationship->getRelatedModel(),
+                    $this->buildRelationshipArgs($relationship->getRelationshipArgs())
+                );                
 
                 $relationshipStr .= $content;
             }
         }
 
-        $stub = str_replace("DummyDisplayName", '', $stub);
+        $stub = $this->addDisplayName($stub, $dataType);
         return str_replace("DummyRelationship", $relationshipStr, $stub);
     }
 
-    private function buildRelationshipArgs(array $args)
+    protected function addDisplayName($stub, $datatype)
+    {
+        $content = "\tpublic function getDisplayNameAttribute()\n";
+        $content .= "\t{\n\t\treturn \$this->";
+        $content .= $datatype->getDisplayNameField().";\n\t}";
+
+        return str_replace("DummyDisplayName", $content, $stub);
+    }
+
+    private function buildRelationshipArgs(array $args = [])
     {
         $result = '';
         if (count($args) > 0) {

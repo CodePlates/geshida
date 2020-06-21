@@ -13,7 +13,7 @@ class DatatypeMigrationCreator extends MigrationCreator
 	public function createFromDatatype(DataType $datatype)
 	{  
 		$this->datatype = $datatype;  
-		$table = $datatype->getTableName().rand(0,1000); 
+		$table = $datatype->getTableName(); 
 		$file = parent::create(
 			"create_{$table}_table", 
 			$this->getMigrationPath(), 
