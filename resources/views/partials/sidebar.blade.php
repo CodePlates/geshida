@@ -4,14 +4,12 @@
 		<li class="nav-item">
 			<a class="nav-link active" href="{{ url('/') }}">Dashboard</a>
 		</li>
+		@foreach($cruds as $crud)
 		<li class="nav-item">
-			<a class="nav-link" href="{{ route('posts.index') }}">Posts</a>
+			<a class="nav-link" href="{{ crud_route('index', $crud['model']) }}">
+				{{ label($crud['model']::getDataType(), 'title_index') }}
+			</a>
 		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="#">Link</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-		</li>
+		@endforeach
 	</ul>
 </div>

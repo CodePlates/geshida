@@ -37,7 +37,8 @@ class Crud {
 	}
 
 
-	public static function getModels() {
+	public static function getModels() 
+	{
 		return self::$models;
 	}
 
