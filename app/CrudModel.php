@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class CrudModel extends Model 
 {
 
+	protected static $datatype;
+
 	private static function getDataTypeClass() 
 	{
 		if (isset(static::$datatype)) 
@@ -18,12 +20,13 @@ class CrudModel extends Model
 
 	public static function getDataType()
 	{
-		static $datatype = null;
-		if (is_null($datatype)) {
+		static $datatypeObj = null;
+		if (is_null($datatypeObj)) {
 			$class_name = static::getDataTypeClass();	
-			$datatype = new $class_name;	
+			$datatypeObj = new $class_name;	
 		}
 
-		return $datatype;
-	}
+		return $datatypeObj;
+	}	
+	
 }

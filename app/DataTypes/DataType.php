@@ -60,9 +60,13 @@ abstract class DataType {
   }
 
   public function getDisplayNameField()
-  {
-    return $this->fields->getNames()->first(function ($fieldName) {
-      return in_array(strtolower($fieldName), ['name', 'title']);
-    }, 'id');    
+  {    
+    $fieldnames = $this->fields->getNames();
+    return Arr::first(
+      ['display_name', 'name', 'title'],
+      function ($name) use ($fieldnames) {
+        return $fieldnames->contains(strtolower($name));
+      }, 'id'
+    );  
   }
 }

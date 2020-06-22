@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Console\GeneratorCommand;
 use App\DataTypes\DataType;
+use Illuminate\Support\Str;
+
 
 class DataTypeCommand extends GeneratorCommand
 {
@@ -24,6 +26,11 @@ class DataTypeCommand extends GeneratorCommand
 
     protected $type = 'DataType';
 
+    protected function getNameInput()
+    {
+        return Str::studly(trim($this->argument('name')));
+    }
+
     protected function getStub()
     {
         return __DIR__.'/stubs/datatype.stub';
@@ -32,13 +39,6 @@ class DataTypeCommand extends GeneratorCommand
     protected function getDefaultNamespace($rootNamespace)
     {
         return 'App\DataTypes';
-    }
-
-    protected function getArguments()
-    {
-        return [
-            ['name', InputArgument::REQUIRED, 'The name of the datatype'],
-        ];
-    }
+    }    
     
 }

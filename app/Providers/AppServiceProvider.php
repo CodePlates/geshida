@@ -3,42 +3,46 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use App\DatatypeMigrationCreator;
+use App\Crud;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-        // $this->app->bind('App\DatatypeMigrationCreator', function ($app) {
-        //     return new DatatypeMigrationCreator(
-        //         $app->make('Illuminate\Filesystem\Filesystem'),
-        //         $app->make('Illuminate\Database\Migrations\MigrationCreator')
-        //     );
-        // });
-    }
+	/**
+	 * Register any application services.
+	 *
+	 * @return void
+	 */
+	public function register()
+	{
+		//
+		// $this->app->bind('App\DatatypeMigrationCreator', function ($app) {
+		//     return new DatatypeMigrationCreator(
+		//         $app->make('Illuminate\Filesystem\Filesystem'),
+		//         $app->make('Illuminate\Database\Migrations\MigrationCreator')
+		//     );
+		// });
+	}
 
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        
-        \App\Crud::register(\App\Tag::class, 'App\Http\Controllers\TagController');
-        \App\Crud::register(\App\Post::class, 'App\Http\Controllers\PostController');
-        \App\Crud::register(\App\Page::class, 'App\Http\Controllers\PageController');
-        \App\Crud::register(\App\Human::class, 'App\Http\Controllers\HumanController');
+	/**
+	 * Bootstrap any application services.
+	 *
+	 * @return void
+	 */
+	public function boot()
+	{
+		
+		Crud::register(\App\Tag::class, 'App\Http\Controllers\TagController');
+		Crud::register(\App\Post::class, 'App\Http\Controllers\PostController');
+		Crud::register(\App\Page::class, 'App\Http\Controllers\PageController');
+		Crud::register(\App\Human::class, 'App\Http\Controllers\HumanController');
 
-        \View::composer('partials.sidebar', function ($view) {
-            $view->with(['cruds' => \App\Crud::getModels()]);
-        });
-    }
+		Crud::register(\App\Role::class, 'App\Http\Controllers\RoleController');
+
+		View::composer('partials.sidebar', function ($view) {
+			$view->with(['cruds' => \App\Crud::getModels()]);
+		});
+	}
 }
