@@ -11,7 +11,7 @@ class Text extends FieldType
 {
   public function getDbColumnType()
   {
-    return ['string', 50];
+    return ['string'];
   }
 
   public function getFormField()

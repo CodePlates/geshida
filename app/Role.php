@@ -9,5 +9,8 @@ class Role extends CrudModel
 {    
 	protected static $datatype = RoleDatatype::class;	
 
-
+	public function getDisplayNameAttribute()
+	{
+		return $this->attributes['display_name'];
+	}
 }

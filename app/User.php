@@ -2,38 +2,29 @@
 
 namespace App;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use App\CrudModel;
+use App\DataTypes\User as UserDatatype;
 
-class User extends Authenticatable
-{
-    use Notifiable;
+class User extends CrudModel
+{    
+	protected static $datatype = UserDatatype::class;	
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
+	protected $hidden = [
+		'password', 'remember_token',
+  	];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+	public function role()
+	{
+		return $this->belongsTo('App\Role');
+	}
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+	public function getFullNameAttribute()
+	{
+		return "{$this->first_name} {$this->last_name}";
+	}
+
+	public function getDisplayNameAttribute()
+	{
+		return $this->full_name;
+	}
 }

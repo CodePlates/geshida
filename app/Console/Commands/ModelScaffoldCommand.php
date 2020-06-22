@@ -94,12 +94,13 @@ class ModelScaffoldCommand extends GeneratorCommand
     {      
         $content = '';  
         $displayField = $datatype->getDisplayNameField();
+       
+        if ($displayField == 'display_name') 
+            $displayField = 'attributes[\'display_name\']';
 
-        if ($displayField != 'display_name') {
-            $content .= "\tpublic function getDisplayNameAttribute()\n";
-            $content .= "\t{\n\t\treturn \$this->";
-            $content .= $displayField.";\n\t}";
-        }
+        $content .= "\tpublic function getDisplayNameAttribute()\n";
+        $content .= "\t{\n\t\treturn \$this->";
+        $content .= $displayField.";\n\t}";        
 
         return str_replace("DummyDisplayName", $content, $stub);
     }

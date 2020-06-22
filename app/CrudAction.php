@@ -4,6 +4,7 @@ namespace App;
 
 use App\CrudModel;
 use App\FieldsCollection;
+use App\FieldTypes\FieldType;
 
 class CrudAction {
 

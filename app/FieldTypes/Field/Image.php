@@ -20,8 +20,12 @@ class Image extends FileFieldType
 
 	public function browseDisplay($dataItem)
 	{
-		$imageUrl = asset(Storage::url($dataItem->{$this->getName()}));
-		return '<img src="'.e($imageUrl).'" width="40" height="40" />';
+		$path = $dataItem->{$this->getName()};
+		if ($path) {
+			$imageUrl = asset(Storage::url($path));
+			return '<img src="'.e($imageUrl).'" width="40" height="40" />';
+		}  
+		return '';
 	}
 	
 }

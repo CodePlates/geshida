@@ -40,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
 		Crud::register(\App\Human::class, 'App\Http\Controllers\HumanController');
 
 		Crud::register(\App\Role::class, 'App\Http\Controllers\RoleController');
+		Crud::register(\App\User::class, 'App\Http\Controllers\UserController');
 
 		View::composer('partials.sidebar', function ($view) {
 			$view->with(['cruds' => \App\Crud::getModels()]);
