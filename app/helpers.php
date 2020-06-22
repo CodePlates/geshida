@@ -40,3 +40,15 @@ if (! function_exists('crud_route')) {
 		}
 	}
 }
+
+if (! function_exists('dashboard_view')) {
+
+	function dashboard_view(string $view, $crud) 
+	{
+		$slug = $crud->datatype()->getSlug();
+		return view()->first(
+			["{$slug}.{$view}", "crud.{$view}"], 
+			$crud->getData()
+		);
+	}
+}

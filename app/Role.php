@@ -12,7 +12,7 @@ class Role extends CrudModel
 
 	public function getDisplayNameAttribute()
 	{
-		return $this->attributes['display_name'];
+		return $this->attributes['display_name'] ?? '';
 	}
 
 	public function permissions()
@@ -35,5 +35,12 @@ class Role extends CrudModel
 		foreach ($permissions as $permission) {
 			$this->addPermission($permission);
 		}
+	}
+
+	public function syncPermissions($permissions = [])
+	{
+		// FIXME: i should use manyToMany sync but naah. later
+		$this->permissions()->detach();
+		$this->addPermissions($permissions);
 	}
 }

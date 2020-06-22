@@ -29,7 +29,7 @@ class CrudController extends Controller
         }
         
         $this->crud->appendData(['dataItems' => $query->get()]);
-        return view()->first(['crud.index'], $this->crud->getData());
+        return dashboard_view('index', $this->crud);
     }
 
     /**
@@ -46,7 +46,7 @@ class CrudController extends Controller
         $model = $this->crud->getModel();
         $this->crud->appendData(['dataItem' => new $model]);
         $this->crud->populateFormRelationshipData();
-        return view()->first(['crud.create'], $this->crud->getData());
+        return dashboard_view('create', $this->crud);
     }
 
     /**
@@ -72,6 +72,10 @@ class CrudController extends Controller
                 $dataItem->{$fieldName} = $request->{$fieldName};
         }
         $dataItem->save();
+
+        if (method_exists($this, 'afterSave')) {
+            $this->afterSave($request, $dataItem);
+        }
 
         $model = $this->crud->getModel();
         return redirect(crud_route("index", $model));
@@ -103,7 +107,7 @@ class CrudController extends Controller
         
         $this->crud->appendData(compact('dataItem'));
         $this->crud->populateFormRelationshipData();
-        return view()->first(['crud.edit'], $this->crud->getData());
+        return dashboard_view('edit', $this->crud);
     }
 
     /**
@@ -130,6 +134,10 @@ class CrudController extends Controller
                 $dataItem->{$fieldName} = $request->{$fieldName};
         }
         $dataItem->save();
+
+        if (method_exists($this, 'afterSave')) {
+            $this->afterSave($request, $dataItem);
+        }
 
         $model = $this->crud->getModel();
         return redirect(crud_route("index", $model));

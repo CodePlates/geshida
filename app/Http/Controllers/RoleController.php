@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\CrudController;
 use App\Role;
+use App\Permission;
+use App\Http\Controllers\CrudController;
 use Illuminate\Http\Request;
 
 class RoleController extends CrudController
@@ -30,7 +31,13 @@ class RoleController extends CrudController
 	 */
 	public function setupCreate()
 	{
-		//
+		$permissions = Permission::all()->groupBy('group');
+		$this->crud->appendData(compact('permissions'));
+	}
+
+	public function afterSave(Request $request, Role $role)
+	{
+		$role->syncPermissions($request->permissions);
 	}
 	
 
@@ -53,7 +60,8 @@ class RoleController extends CrudController
 	 */
 	public function setupEdit(Role $role)
 	{
-		//
+		$permissions = Permission::all()->groupBy('group');
+		$this->crud->appendData(compact('permissions'));
 	}
 
 }
