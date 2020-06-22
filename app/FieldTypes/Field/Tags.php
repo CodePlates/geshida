@@ -41,6 +41,7 @@ class Tags extends FieldType
 
 	public function saveAction($model, $value)
 	{
+		$model->save();
 		$relationship = $this->getRelationship();
 		$model->{$this->getName()}()->sync($value);		
 	}

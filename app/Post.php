@@ -16,7 +16,7 @@ class Post extends CrudModel
 
 	public function tags()
 	{
-		return $this->belongsToMany('App\Tag');
+		return $this->belongsToMany('App\Tag','post_tags');
 	}
 
 	public function getDisplayNameAttribute()

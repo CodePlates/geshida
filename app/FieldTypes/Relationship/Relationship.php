@@ -49,7 +49,7 @@ abstract class Relationship
 	{
 		foreach ($args as $arg) {
 			if (!is_null($arg))
-				$relationshipArgs[] = $arg;
+				$this->relationshipArgs[] = $arg;
 		}
 	}
 
