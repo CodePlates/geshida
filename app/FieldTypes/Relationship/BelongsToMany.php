@@ -30,7 +30,7 @@ class BelongsToMany extends Relationship
 	
 	public function loadFormData()
 	{
-		return $this->model::all();
+		return $this->model::all()->getDictionary();
 	}
 
 	public function loadBrowseData($collection)

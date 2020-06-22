@@ -24,7 +24,7 @@ class Tags extends FieldType
 		// 	return $this->listOptions;
 		
 		if (!is_null($relationshipData))
-			return $relationshipData[$this->getName()]->keyBy('id');
+			return $relationshipData[$this->getName()];
 
 		return [];
 	}

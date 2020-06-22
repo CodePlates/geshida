@@ -40,9 +40,9 @@ class DropDown extends FieldType
 	{
 		if ($this->optionsType == 'list')
 			return $this->listOptions;
-		
+	
 		if ($this->optionsType == 'belongsTo' && !is_null($relationshipData)) 
-			return $relationshipData[$this->getName()]->keyBy('id');		
+			return $relationshipData[$this->getName()];		
 
 		return [];
 	}
