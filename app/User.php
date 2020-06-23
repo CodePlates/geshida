@@ -3,10 +3,19 @@
 namespace App;
 
 use App\CrudModel;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use App\DataTypes\User as UserDatatype;
 
-class User extends CrudModel
+class User extends CrudModel implements
+    AuthenticatableContract,
+    AuthorizableContract
 {    
+
+	use Authenticatable, Authorizable;
+
 	protected static $datatype = UserDatatype::class;	
 
 	protected $hidden = [

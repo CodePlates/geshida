@@ -13,6 +13,7 @@
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->middleware('auth');
 
+Auth::routes();
 //Route::resource('posts', 'PostController');

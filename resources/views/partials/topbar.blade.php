@@ -19,4 +19,27 @@
       </li>
     </ul>
   </div>
+
+  <div class="nav-right">
+      @guest
+      <a href="{{ route('login') }}" class="btn btn-outline-dark">Login</a>      
+      @endguest
+
+      @auth
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img src="{{ asset(Storage::url(Auth::user()->avatar)) }}" alt="">
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdown">            
+
+            <a class="dropdown-item" href="javascript:;" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+              @csrf
+            </form>
+          </div>
+        </li>
+      </ul>
+      @endauth
+    </div>
 </nav>

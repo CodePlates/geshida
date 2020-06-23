@@ -28,7 +28,7 @@ class Crud {
 			'slug'			=> $slug,
 		];
 
-		Route::resource($slug, $controller);
+		Route::resource($slug, $controller)->middleware(['web','auth']);
 	}
 
 	public static function getSlug(string $modelClass)
