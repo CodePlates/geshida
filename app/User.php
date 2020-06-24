@@ -36,4 +36,9 @@ class User extends CrudModel implements
 	{
 		return $this->full_name;
 	}
+
+	public function hasPermission(string $permission)
+	{
+		return $this->role->permissions->contains('name', $permission);
+	}
 }

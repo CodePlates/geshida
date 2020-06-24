@@ -5,11 +5,13 @@
 			<a class="nav-link active" href="{{ url('/') }}">Dashboard</a>
 		</li>
 		@foreach($cruds as $crud)
-		<li class="nav-item">
-			<a class="nav-link" href="{{ crud_route('index', $crud['model']) }}">
-				{{ label($crud['model']::getDataType(), 'title_index') }}
-			</a>
-		</li>
+			@can('viewAny', $crud['model'])
+			<li class="nav-item">
+				<a class="nav-link" href="{{ crud_route('index', $crud['model']) }}">
+					{{ label($crud['model']::getDataType(), 'title_index') }}
+				</a>
+			</li>
+			@endcan
 		@endforeach
 	</ul>
 </div>

@@ -23,6 +23,8 @@ class CrudController extends Controller
     public function index()
     {
         $model = $this->crud->getModel();
+        $this->authorize('viewAny', $model);
+
         $query = $model::query();
         if (method_exists($this, 'setupIndex')) {
             $this->setupIndex($query);
@@ -39,11 +41,13 @@ class CrudController extends Controller
      */
     public function create()
     {
+        $model = $this->crud->getModel();
+        $this->authorize('create', $model);
+
         if (method_exists($this, 'setupCreate')) {
             $this->setupCreate();
         }
         
-        $model = $this->crud->getModel();
         $this->crud->appendData(['dataItem' => new $model]);
         $this->crud->populateFormRelationshipData();
         return dashboard_view('create', $this->crud);
@@ -57,11 +61,13 @@ class CrudController extends Controller
      */
     public function store(Request $request)
     {
+        $model = $this->crud->getModel();
+        $this->authorize('create', $model);
+
         if (method_exists($this, 'setupCreate')) {
             $this->setupCreate();
         }
 
-        $model = $this->crud->getModel();
         $datatype = $this->crud->datatype();
         $dataItem = new $model;
 
@@ -101,6 +107,8 @@ class CrudController extends Controller
     public function edit($id)
     {
         $dataItem = $this->crud->find($id);
+        $this->authorize('update', $dataItem);
+
         if (method_exists($this, 'setupEdit')) {
             $this->setupEdit($dataItem);
         }
@@ -120,7 +128,8 @@ class CrudController extends Controller
     public function update(Request $request, $id)
     {
         $dataItem = $this->crud->find($id);
-        $datatype = $this->crud->datatype();
+        $this->authorize('update', $dataItem);
+        
         if (method_exists($this, 'setupEdit')) {
             $this->setupEdit($dataItem);
         }
@@ -151,7 +160,10 @@ class CrudController extends Controller
      */
     public function destroy($id)
     {
-        $this->crud->delete($id);
+        $dataItem = $this->crud->find($id);
+        $this->authorize('delete', $dataItem);
+
+        $dataItem->delete();
         $model = $this->crud->getModel();
         return redirect(crud_route("index", $model));
     }
