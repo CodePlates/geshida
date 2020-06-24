@@ -8,7 +8,7 @@ use App\SettingsModel;
 
 class SettingsManager 
 {
-	const CACHE_KEY = 'site.settings';
+	const CACHE_KEY = 'app.settings';
 	private static $settings = null;
 
 	public function load()

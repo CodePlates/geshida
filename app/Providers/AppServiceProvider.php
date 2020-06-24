@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use App\DatatypeMigrationCreator;
 use App\Crud;
+use App\SettingsManager;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,6 +18,9 @@ class AppServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
+		$this->app->singleton('settings', function() {
+         return new SettingsManager();
+      });
 		//
 		// $this->app->bind('App\DatatypeMigrationCreator', function ($app) {
 		//     return new DatatypeMigrationCreator(
