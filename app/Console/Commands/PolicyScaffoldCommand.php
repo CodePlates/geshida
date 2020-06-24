@@ -38,6 +38,8 @@ class PolicyScaffoldCommand extends GeneratorCommand
 
     protected function buildClass($name)
     {
+        //FIXME: take time, rewrite this instead of copy paste like you did. 
+        // FIXME: conflict with user policy multiple use App\User
         $datatypeName = $this->getDatatypeInput();
         $dataTypeClass = $this->qualifyDataTypeClass($datatypeName);
         $dataType = $this->resolve($dataTypeClass);

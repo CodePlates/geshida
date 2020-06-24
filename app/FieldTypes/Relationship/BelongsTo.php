@@ -11,13 +11,14 @@ class BelongsTo extends Relationship
 	protected $foreignKey;
 	protected $localKey;
 
-	public function __construct($model, $foreignKey = null, $localKey = null)
+	public function __construct($model, $localKey = null, $foreignKey = null)
 	{
 		if (!class_exists($model))
 			throw new \Exception("Model: $model does not exist");
 		$this->model = $model;
 		$this->foreignKey = $foreignKey;
 		$this->localKey = $localKey;
+		$this->columnName = $localKey;
 
 		$this->setRelationshipArgs([$foreignKey, $localKey]);		
 	}

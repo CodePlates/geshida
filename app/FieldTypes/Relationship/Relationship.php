@@ -13,6 +13,7 @@ abstract class Relationship
 	protected $model;
 	protected $table;	
 	protected $field;
+	public $columnName;
 
 	abstract function getRelationshipTypeName();
 

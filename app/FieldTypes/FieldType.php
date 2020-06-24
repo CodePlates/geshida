@@ -16,6 +16,7 @@ abstract class FieldType
 	protected $model;
 	private $relationship;
 	protected $hasRelationship = false;
+	protected $dbColumnName;
 
 	function __construct($name)
 	{
@@ -33,9 +34,14 @@ abstract class FieldType
 		return $this->name;
 	}
 
-	protected function getDbColumnName()
+	public function getDbColumnName()
+	{					
+		return $this->dbColumnName ?? $this->name;
+	}
+
+	public function setDbColumnName(string $columnName)
 	{
-		return $this->name;
+		$this->dbColumnName = $columnName;
 	}
 
 	abstract function getFormField();
@@ -111,6 +117,7 @@ abstract class FieldType
 		$relationship->setField($this);
 		$this->relationship = $relationship;
 		$this->hasRelationship = true;
+		$this->dbColumnName = $relationship->columnName;
 	}
 
 	public function getRelationship()

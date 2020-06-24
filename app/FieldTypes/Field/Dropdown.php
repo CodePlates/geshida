@@ -53,12 +53,7 @@ class DropDown extends FieldType
 			return 'unsignedBigInteger';
 		
 		return 'string';		
-	}
-
-	public function getDbColumnName()
-	{
-		return $this->name."_id";
-	}
+	}	
 
 	public function saveAction($model, $value)
 	{
