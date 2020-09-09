@@ -26,6 +26,8 @@ abstract class Subsystem extends ServiceProvider
 	protected $routesFile = "routes/web.php";
 
 	private static $table = "subsystems";
+
+	public static $currentSubsystemData;
 	
 	public function __construct()
 	{

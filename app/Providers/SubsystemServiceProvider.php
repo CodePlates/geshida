@@ -34,23 +34,25 @@ class SubsystemServiceProvider extends ServiceProvider
     public function boot()
     {
         $subsystems = Subsystem::getEnabled();
-        foreach ($subsystems as $subsystemData) {   
-            $name = $subsystemData->name;
-            $this->loadSubsystemRoutes($name);       
-            $subsystem = Subsystem::resolve($name);
+        foreach ($subsystems as $subsystemData) {  
+            $this->loadSubsystemRoutes($subsystemData);       
+            $subsystem = Subsystem::resolve($subsystemData->name);
             $subsystem->boot();
         }
     }
 
 
-    protected function loadSubsystemRoutes($subsystemName)
+    protected function loadSubsystemRoutes($subsystemData)
     {
-        $routefile = base_path("cms/subsystems/{$subsystemName}/routes/web.php");
-        $namespace = "Subsystem\\$subsystemName\\App\\Http\\Controllers";
+        $name = $subsystemData->name;
+        $routefile = base_path("cms/subsystems/{$name}/routes/web.php");
+        $namespace = "Subsystem\\$name\\App\\Http\\Controllers";
         if (file_exists($routefile)) {
-            Route::namespace($namespace)->group(function() use ($routefile) {
-                $this->loadRoutesFrom($routefile);            
-            });
+            Route::namespace($namespace)
+                ->prefix($subsystemData->route)
+                ->middleware('web')
+                ->group($routefile); 
+                       
         }
     }
 }

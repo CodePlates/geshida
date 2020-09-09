@@ -11,6 +11,8 @@
 |
 */
 
+
+
 Route::get('/admin', function () {
     return view('welcome');
 })->middleware('auth');
