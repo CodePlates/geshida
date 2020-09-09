@@ -33,15 +33,16 @@ class SubsystemServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $subsystems = Settings::get('active_subsystems', []);
-        foreach ($subsystems as $subsystemName) {   
-            $this->loadSubsystemRoutes($subsystemName);       
-            $subsystem = Subsystem::resolve($subsystemName);
+        $subsystems = Subsystem::getEnabled();
+        foreach ($subsystems as $subsystemData) {   
+            $name = $subsystemData->name;
+            $this->loadSubsystemRoutes($name);       
+            $subsystem = Subsystem::resolve($name);
             $subsystem->boot();
         }
     }
 
-   
+
     protected function loadSubsystemRoutes($subsystemName)
     {
         $routefile = base_path("cms/subsystems/{$subsystemName}/routes/web.php");

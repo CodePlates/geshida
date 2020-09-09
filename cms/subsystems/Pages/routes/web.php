@@ -1,5 +1,3 @@
 <?php 
 
-Route::get("/", function(){
-	return "Hello Subsystem";
-});
+Route::get("/", "PageController@index");

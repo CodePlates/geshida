@@ -6,19 +6,28 @@ use Storage;
 use Settings;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Arr;
+
 /**
  * 
  */
-class Subsystem extends ServiceProvider
+abstract class Subsystem extends ServiceProvider
 {
 
 	protected $name;
 
+	protected $display_name;
+
+	protected $prefferedRoutes = [];
+
 	protected $migrations = "database/migrations";
 
 	protected $routesFile = "routes/web.php";
+
+	private static $table = "subsystems";
 	
-	function __construct()
+	public function __construct()
 	{
 		
 	}
@@ -35,6 +44,49 @@ class Subsystem extends ServiceProvider
 		$filesystem = app()->make(Filesystem::class);
 		$subsystemFile = $filesystem->requireOnce(base_path("cms/subsystems/$name/{$class}.php"));
 		return new $class;
+	}
+
+	public function getPreferredRoutes()
+	{
+		return $this->prefferedRoutes ?? [];
+	}
+
+	public function install() 
+	{
+		//TODO: run migrations
+		//
+		DB::table(self::$table)->insert([
+			'name' => $this->name,
+			'display_name' => $this->display_name ?? $this->name,
+			'installed' => true,
+		]);
+	}
+
+	public function enable()
+	{
+		$routes = static::getRoutes();
+		$route = Arr::first(
+			$this->getPreferredRoutes(), 
+			function($value) use($routes){
+				return !$routes->contains($value);
+			}, 
+			$this->name.time()
+		);	
+
+		DB::table(self::$table)->where('name', $this->name)->update([
+			'enabled' => true,
+			'route' => $route,
+		]);
+	}
+
+	public static function getEnabled()
+	{
+		return DB::table(self::$table)->where('enabled', true)->get();
+	}
+
+	public static function getRoutes()
+	{
+		return static::getEnabled()->pluck('route');
 	}
 
 	// public function subsystemPath($path = "")
