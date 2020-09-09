@@ -68,11 +68,13 @@ abstract class Subsystem extends ServiceProvider
 		$migrator->run($this->getMigrationsPath());
 		$migrator->resetSubsystem();
 		
-		DB::table(self::$table)->insert([
-			'name' => $this->name,
-			'display_name' => $this->display_name ?? $this->name,
-			'installed' => true,
-		]);
+		DB::table(self::$table)->updateOrInsert(
+			[
+				'name' => $this->name,
+				'display_name' => $this->display_name ?? $this->name,
+			],
+			['installed' => true,]
+		);
 	}
 
 	public function uninstall()
@@ -84,6 +86,7 @@ abstract class Subsystem extends ServiceProvider
 		
 		DB::table(self::$table)->where('name', $this->name)->update([
 			'installed' => false,
+			'enabled' => false,
 		]);
 	}	
 
@@ -117,7 +120,9 @@ abstract class Subsystem extends ServiceProvider
 	public static function getEnabled()
 	{
 		if (\Schema::hasTable(self::$table))
-			return DB::table(self::$table)->where('enabled', true)->get();
+			return DB::table(self::$table)
+				->where('installed', true)
+				->where('enabled', true)->get();
 		else return collect([]);
 	}
 

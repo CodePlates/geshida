@@ -12,7 +12,7 @@ use Subsystem\Page\App\Http\Controllers\PageController;
 class PagesSubsystem extends Subsystem
 {
 	
-	protected $prefferedRoutes = ["page"];
+	protected $prefferedRoutes = ["", "page"];
 
 	protected $name = "Pages";
 
