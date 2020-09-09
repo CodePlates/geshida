@@ -8,6 +8,7 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
+use App\DatabaseMigrationRepository;
 
 /**
  * 
@@ -28,6 +29,8 @@ abstract class Subsystem extends ServiceProvider
 	private static $table = "subsystems";
 
 	public static $currentSubsystemData;
+
+	
 	
 	public function __construct()
 	{
@@ -53,9 +56,18 @@ abstract class Subsystem extends ServiceProvider
 		return $this->prefferedRoutes ?? [];
 	}
 
+	protected function getMigrationsPath()
+	{
+		return base_path("cms/subsystems/{$this->name}/{$this->migrations}");
+	}
+
 	public function install() 
 	{
-		//TODO: run migrations
+		$migrator = app()->make('subsystem.migrator');
+		$migrator->subsystem = $this->name;
+		$migrator->run($this->getMigrationsPath());
+		$migrator->subsystem = null;
+		//
 		//
 		DB::table(self::$table)->insert([
 			'name' => $this->name,
@@ -83,7 +95,9 @@ abstract class Subsystem extends ServiceProvider
 
 	public static function getEnabled()
 	{
-		return DB::table(self::$table)->where('enabled', true)->get();
+		if (\Schema::hasTable(self::$table))
+			return DB::table(self::$table)->where('enabled', true)->get();
+		else return collect([]);
 	}
 
 	public static function getRoutes()
