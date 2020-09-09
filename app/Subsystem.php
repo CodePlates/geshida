@@ -64,11 +64,10 @@ abstract class Subsystem extends ServiceProvider
 	public function install() 
 	{
 		$migrator = app()->make('subsystem.migrator');
-		$migrator->subsystem = $this->name;
+		$migrator->setSubsystem($this->name);
 		$migrator->run($this->getMigrationsPath());
-		$migrator->subsystem = null;
-		//
-		//
+		$migrator->resetSubsystem();
+		
 		DB::table(self::$table)->insert([
 			'name' => $this->name,
 			'display_name' => $this->display_name ?? $this->name,

@@ -11,7 +11,7 @@ use Illuminate\Database\ConnectionResolverInterface as Resolver;
 class SubsystemMigrationRepository extends DatabaseMigrationRepository
 {
    
-    public $subsystem = null; 
+    public $subsystem; 
     /**
      * Get the completed migrations.
      *
@@ -25,6 +25,7 @@ class SubsystemMigrationRepository extends DatabaseMigrationRepository
                 ->where('subsystem', $this->subsystem)
                 ->pluck('migration')->all();
     }
+   
 
     /**
      * Get list of migrations.
@@ -49,9 +50,9 @@ class SubsystemMigrationRepository extends DatabaseMigrationRepository
      */
     public function getLast()
     {
-        $query = $this->table()->where('batch', $this->getLastBatchNumber());
+        $query = $this->table()->where('subsystem', $this->subsystem)->where('batch', $this->getLastBatchNumber());
 
-        return $query->where('subsystem', $this->subsystem)->orderBy('migration', 'desc')->get()->all();
+        return $query->orderBy('migration', 'desc')->get()->all();
     }
 
     /**
@@ -114,7 +115,9 @@ class SubsystemMigrationRepository extends DatabaseMigrationRepository
      */
     public function getLastBatchNumber()
     {
-        return $this->table()->where('subsystem', $this->subsystem)->max('batch');
+        $d = $this->table()->where('subsystem', $this->subsystem)->max('batch');
+        print_r($this->subsystem); 
+        return $d;
     }
 
     /**
