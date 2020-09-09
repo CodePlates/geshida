@@ -23,7 +23,6 @@ class ThemeServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
-        
+        $this->loadViewsFrom(base_path('cms/themes'), 'geshida');        
     }
 }

@@ -20,7 +20,7 @@ class PageController extends Controller
      */
     public function index()
     {
-        return "<h2 style='text-align: center;'>Here is a list of pages. Not that you need it</h2>";
+        return theme_view('index');
     }
 
     /**

@@ -175,6 +175,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\SubsystemServiceProvider::class,
+        App\Providers\ThemeServiceProvider::class,
 
     ],
 

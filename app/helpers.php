@@ -2,8 +2,10 @@
 
 use App\Crud;
 use App\CrudModel;
+use App\Subsystem;
 use App\Datatypes\DataType;
 use App\FieldTypes\FieldType;
+
 
 if (! function_exists('label')) {
 
@@ -50,5 +52,18 @@ if (! function_exists('dashboard_view')) {
 			["{$slug}.{$view}", "crud.{$view}"], 
 			$crud->getData()
 		);
+	}
+}
+
+if (! function_exists('theme_view')) {
+
+	function theme_view($view, $data = [], $mergeData = [])
+	{
+		$subsystemData = Subsystem::$currentSubsystemData;
+		$theme = $subsystemData->theme;
+		if ($theme == 'default')
+			$theme .= '.'.$subsystemData->name; 
+		$view = "geshida::${theme}.${view}";
+		return view($view, $data, $mergeData);
 	}
 }
