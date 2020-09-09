@@ -20,7 +20,7 @@ class CreateMenuItemsTable extends Migration
             $table->string('url');
             $table->boolean('new_tab')->default(false);
             $table->string('icon')->nullable();
-            $table->integer('parent_id')->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->integer('order');
             $table->timestamps();
 
