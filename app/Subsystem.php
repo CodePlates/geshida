@@ -1,0 +1,108 @@
+<?php 
+
+namespace App;
+
+use Storage;
+use Settings;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\ServiceProvider;
+/**
+ * 
+ */
+class Subsystem extends ServiceProvider
+{
+
+	protected $name;
+
+	protected $migrations = "database/migrations";
+
+	protected $routesFile = "routes/web.php";
+	
+	function __construct()
+	{
+		
+	}
+
+	public function boot()
+	{
+		
+	}
+
+	public static function resolve($name)
+	{
+		//FIXME: use the namespaces
+		$class = $name."Subsystem";
+		$filesystem = app()->make(Filesystem::class);
+		$subsystemFile = $filesystem->requireOnce(base_path("cms/subsystems/$name/{$class}.php"));
+		return new $class;
+	}
+
+	// public function subsystemPath($path = "")
+	// {
+	// 	return "cms/subsystems/{$this->name}/$path";
+	// }
+
+	// public function migrationsPath()
+	// {
+	// 	return $this->subsystemPath($this->migrations);
+	// }
+
+	// public function getName()
+	// {
+	// 	return $this->name;
+	// }
+
+	// public function install()
+	// {
+	// 	$migrator = new \App\Migrator;
+	// 	$migrator->run($this->migrationsPath());
+	// }
+
+	// public function uninstall()
+	// {
+
+	// }
+
+	// public function enable()
+	// {
+
+	// }
+
+	// public function disable()
+	// {
+
+	// }
+
+	
+
+	// public static function getFolderSubsystems()
+	// {
+	// 	$directories = Storage::disk('subsystems')->directories();
+	// 	$subsystems = [];
+	// 	$active_subsystems = Settings::get('active_subsystems', []);
+	// 	$installed_subsystems = Settings::get('installed_subsystems', []);
+
+	// 	foreach ($directories as $subsystemName) {
+	// 		$subsystem_json = $subsystemName."/subsystem.json";
+	// 		if(Storage::disk('subsystems')->exists($subsystem_json)) {
+	// 			$json = Storage::disk('subsystems')->get($subsystem_json);
+	// 				$subsystem = json_decode($json);
+	// 				$subsystem->installed = in_array($subsystemName, $installed_subsystems);
+	// 				$subsystem->active = in_array($subsystemName, $active_subsystems);
+	// 				// if (isset($active_subsystems[$subsystemName])) {
+	// 				// 	array_merge(
+	// 				// 		$subsystems[$subsystemName], 
+	// 				// 		$active_subsystems[$subsystemName]
+	// 				// 	); 
+	// 				// }
+	// 				$subsystems[$subsystemName] = $subsystem;
+	// 		} else {
+	// 			// TODO: message invalid subsytem detected
+	// 		}	
+	// 	}
+
+	// 	return $subsystems;
+	// }
+
+
+}
