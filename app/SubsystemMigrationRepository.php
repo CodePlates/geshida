@@ -115,9 +115,7 @@ class SubsystemMigrationRepository extends DatabaseMigrationRepository
      */
     public function getLastBatchNumber()
     {
-        $d = $this->table()->where('subsystem', $this->subsystem)->max('batch');
-        print_r($this->subsystem); 
-        return $d;
+        return $this->table()->where('subsystem', $this->subsystem)->max('batch');
     }
 
     /**

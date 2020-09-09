@@ -75,21 +75,43 @@ abstract class Subsystem extends ServiceProvider
 		]);
 	}
 
+	public function uninstall()
+	{
+		$migrator = app()->make('subsystem.migrator');
+		$migrator->setSubsystem($this->name);
+		$migrator->reset([$this->getMigrationsPath()]);
+		$migrator->resetSubsystem();
+		
+		DB::table(self::$table)->where('name', $this->name)->update([
+			'installed' => false,
+		]);
+	}	
+
 	public function enable()
 	{
+		DB::table(self::$table)->where('name', $this->name)->update([
+			'enabled' => true,
+			'route' => $this->getAvailableRoute(),
+		]);
+	}
+
+	public function disable()
+	{
+		DB::table(self::$table)->where('name', $this->name)->update([
+			'enabled' => false,
+		]);
+	}
+
+	protected function getAvailableRoute()
+	{
 		$routes = static::getRoutes();
-		$route = Arr::first(
+		return Arr::first(
 			$this->getPreferredRoutes(), 
 			function($value) use($routes){
 				return !$routes->contains($value);
 			}, 
 			$this->name.time()
 		);	
-
-		DB::table(self::$table)->where('name', $this->name)->update([
-			'enabled' => true,
-			'route' => $route,
-		]);
 	}
 
 	public static function getEnabled()
@@ -124,22 +146,6 @@ abstract class Subsystem extends ServiceProvider
 	// 	$migrator = new \App\Migrator;
 	// 	$migrator->run($this->migrationsPath());
 	// }
-
-	// public function uninstall()
-	// {
-
-	// }
-
-	// public function enable()
-	// {
-
-	// }
-
-	// public function disable()
-	// {
-
-	// }
-
 	
 
 	// public static function getFolderSubsystems()
