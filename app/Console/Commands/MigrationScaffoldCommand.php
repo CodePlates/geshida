@@ -16,7 +16,9 @@ class MigrationScaffoldCommand extends Command
 	 *
 	 * @var string
 	 */
-	protected $signature = 'scaffold:migration {datatype : The datatype class name}';
+	protected $signature = 'scaffold:migration 
+		{datatype : The datatype class name} 
+		{--subsystem= : The subsystem to create the migration in}';
 
 	/**
 	 * The console command description.
@@ -57,13 +59,14 @@ class MigrationScaffoldCommand extends Command
 		$dataTypeClass = $this->qualifyDataTypeClass(
 			trim($this->argument('datatype'))
 		);
-		$dataType = $this->resolve($dataTypeClass);	
+		$dataType = $this->resolve($dataTypeClass);
+		$path = $this->getPath();	
 					
-		$file = $this->creator->createFromDatatype($dataType);		
+		$file = $this->creator->createFromDatatype($path, $dataType);		
 		$this->showFileCreatedMessage($file);		
 
 		sleep(1);
-		$files = $this->creator->runExtraMigrations($dataType);
+		$files = $this->creator->runExtraMigrations($path, $dataType);
 		foreach ($files as $file) {
 			$this->showFileCreatedMessage($file);	
 		}
@@ -77,11 +80,21 @@ class MigrationScaffoldCommand extends Command
 		$fileName = pathinfo($file, PATHINFO_FILENAME);
 		$this->line("<info>Created Migration:</info> {$fileName}");
 	}
+
+	protected function getSubsystem()
+   {
+        $subsystem = trim($this->option('subsystem'));
+        if (!empty($subsystem)) return $subsystem;
+
+        $this->error("Subsystem not specified");
+        exit();         
+   }
 	
 
 	protected function qualifyDataTypeClass($name)
 	{
-		return "App\\DataTypes\\".$name;
+		$subsystem = $this->getSubsystem();
+		return "Subsystem\\$subsystem\\DataTypes\\".$name;
 	}
 
 	protected function resolve($class_name)
@@ -92,7 +105,11 @@ class MigrationScaffoldCommand extends Command
 			throw new \Exception("Unable to find class ".$class_name);
 	}
 
-	
+	protected function getPath()
+   { 
+		$subsystem = $this->getSubsystem();
+		return base_path("cms/subsystems/$subsystem/database/migrations");
+   }
 
 
 	protected function getArguments()

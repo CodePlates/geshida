@@ -1,14 +1,14 @@
 <?php 
 
-namespace DummyNamespace;
+namespace Subsystem\Pages\DataTypes;
 
-use App\FieldTypes\Field;
 use App\DataTypes\DataType;
+use App\FieldTypes\Field;
 /**
  *  Post datatype for test purpose
  *  will delete later
  */
-class DummyClass extends DataType {
+class Poop extends DataType {
 
 	protected function build()
 	{

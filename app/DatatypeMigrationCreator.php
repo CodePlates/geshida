@@ -8,6 +8,7 @@ use Illuminate\Filesystem\Filesystem;
 use App\FieldTypes\Relationship\BelongsTo;
 use Illuminate\Database\Migrations\MigrationCreator;
 
+// FIXME: maybe creator per subsystem
 
 class DatatypeMigrationCreator 
 {
@@ -34,13 +35,13 @@ class DatatypeMigrationCreator
 
 	}
 
-	public function createFromDatatype(DataType $datatype)
+	public function createFromDatatype($path, DataType $datatype)
 	{ 
 		$table = $datatype->getTableName(); 
 		
 		$file = $this->creator->create(
 			"create_{$table}_table", 
-			$this->getMigrationPath(), 
+			$path, 
 			$table, 
 			true
 		);
@@ -54,11 +55,11 @@ class DatatypeMigrationCreator
 		return $file;
 	}
 
-	public function createPivotTableMigration($table, $localKey, $foreignKey, $localTable, $foreignTable)
+	public function createPivotTableMigration($path, $table, $localKey, $foreignKey, $localTable, $foreignTable)
 	{
 		$file = $this->creator->create(
 			"create_{$table}_table", 
-			$this->getMigrationPath(), 
+			$path, 
 			$table, 
 			true
 		);
@@ -91,7 +92,7 @@ class DatatypeMigrationCreator
 
 
 
-	public function runExtraMigrations($datatype)
+	public function runExtraMigrations($path, $datatype)
 	{
 		// NB: has to run last coz may overwrite datatype
 		// suggested fix is to inject migration creator
@@ -103,7 +104,7 @@ class DatatypeMigrationCreator
 				$relationship = $field->getRelationship();
 				$files = array_merge(
 					$files, 
-					$relationship->buildExtraMigrations($this, $datatype) ?? []
+					$relationship->buildExtraMigrations($this, $path, $datatype) ?? []
 				);
 			}
 		}
@@ -121,11 +122,7 @@ class DatatypeMigrationCreator
 	// 	return $stub;
 	// }
 
-	protected function getMigrationPath() 
-	{
-		return database_path('migrations');
-	}
-
+	
 	protected function addFields($fields, $stub)
 	{
 		$fieldLines = "";

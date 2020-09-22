@@ -3,9 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Console\GeneratorCommand;
 
-class ControllerScaffoldCommand extends GeneratorCommand
+class ControllerScaffoldCommand extends SubsystemGeneratorCommand
 {
     /**
      * The name and signature of the console command.
@@ -14,6 +13,7 @@ class ControllerScaffoldCommand extends GeneratorCommand
      */
     protected $signature = 'scaffold:controller 
         {datatype : The datatype class name}
+        {--subsystem= : The subsystem to create the controller in}
         {--force}';
 
     /**
@@ -21,18 +21,18 @@ class ControllerScaffoldCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $description = 'Create crud controller from datatype';
+    protected $description = 'Create basic controller from datatype';
 
     protected $type = 'Controller';
 
     protected function getNameInput()
     {
-        return trim($this->argument('datatype')).'Controller';
+        return $this->getDatatypeInput().'Controller';
     }
 
     protected function getDefaultNamespace($rootNamespace)
     {
-        return 'App\Http\Controllers';
+        return $rootNamespace.'\App\Http\Controllers';
     }
    
     protected function getStub()
@@ -42,12 +42,15 @@ class ControllerScaffoldCommand extends GeneratorCommand
 
     protected function buildClass($name)
     {
-        $modelClassName = trim($this->argument('datatype'));
-        $modelClass = 'App\\'.$modelClassName;
+        $modelClassName = $this->getDatatypeInput();
+        $modelClass = "{$this->rootNamespace()}Models\\$modelClassName";
 
         if (! class_exists($modelClass)) {
             if ($this->confirm("A {$modelClass} model does not exist. Do you want to generate it?", true)) {
-                $this->call('scaffold:model', ['datatype' => $modelClassName]);
+                $this->call('scaffold:model', [
+                    'datatype' => $modelClassName,
+                    '--subsystem' => $this->getSubsystem()
+                ]);
             }
         }
 

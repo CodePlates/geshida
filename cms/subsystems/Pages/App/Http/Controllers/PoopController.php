@@ -1,12 +1,12 @@
 <?php
 
-namespace DummyNamespace;
+namespace Subsystem\Pages\App\Http\Controllers;
 
-use DummyFullModelClass;
-use DummyRootNamespaceHttp\Controllers\Controller;
 use Illuminate\Http\Request;
+use Subsystem\Pages\Http\Controllers\Controller;
+use Subsystem\Pages\Models\Poop;
 
-class DummyClass extends Controller
+class PoopController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -42,10 +42,10 @@ class DummyClass extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \DummyFullModelClass  $DummyModelVariable
+     * @param  \Subsystem\Pages\Models\Poop  $poop
      * @return \Illuminate\Http\Response
      */
-    public function show(DummyModelClass $DummyModelVariable)
+    public function show(Poop $poop)
     {
         //
     }
@@ -53,10 +53,10 @@ class DummyClass extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \DummyFullModelClass  $DummyModelVariable
+     * @param  \Subsystem\Pages\Models\Poop  $poop
      * @return \Illuminate\Http\Response
      */
-    public function edit(DummyModelClass $DummyModelVariable)
+    public function edit(Poop $poop)
     {
         //
     }
@@ -65,10 +65,10 @@ class DummyClass extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \DummyFullModelClass  $DummyModelVariable
+     * @param  \Subsystem\Pages\Models\Poop  $poop
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, DummyModelClass $DummyModelVariable)
+    public function update(Request $request, Poop $poop)
     {
         //
     }
@@ -76,10 +76,10 @@ class DummyClass extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \DummyFullModelClass  $DummyModelVariable
+     * @param  \Subsystem\Pages\Models\Poop  $poop
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DummyModelClass $DummyModelVariable)
+    public function destroy(Poop $poop)
     {
         //
     }

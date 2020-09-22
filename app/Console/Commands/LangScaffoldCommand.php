@@ -15,6 +15,7 @@ class LangScaffoldCommand extends Command
      */
     protected $signature = 'scaffold:lang 
         {datatype : The datatype class name} 
+        {--subsystem= : The subsystem to create the lang file in}
         {--force}';
 
     /**
@@ -48,8 +49,8 @@ class LangScaffoldCommand extends Command
         $datatypeName = trim($this->argument('datatype'));
         $dataTypeClass = $this->qualifyDataTypeClass($datatypeName);
         $dataType = $this->resolve($dataTypeClass);
-        $langKey = $dataType->getLangKey();
-        $path = resource_path("lang/en/{$langKey}.php");
+        
+        $path = $this->getPath($dataType->getLangKey());
 
         $content = $this->files->get($this->getStub());
 
@@ -64,10 +65,21 @@ class LangScaffoldCommand extends Command
             array_values($replacements), 
             $content
         );    
+
+        $this->makeDirectory($path);
         $this->files->put($path, $content);
 
         $fileName = basename($path);
         $this->line("<info>Lang file created:</info> {$fileName}");
+    }
+
+    protected function makeDirectory($path)
+    {
+        if (! $this->files->isDirectory(dirname($path))) {
+            $this->files->makeDirectory(dirname($path), 0777, true, true);
+        }
+
+        return $path;
     }
 
     protected function generateFieldLabels($dataType)
@@ -85,9 +97,31 @@ class LangScaffoldCommand extends Command
         return __DIR__.'/stubs/lang.stub';
     }
 
-    protected function qualifyDataTypeClass($name)
+    protected function getSubsystem()
     {
-        return "App\\DataTypes\\".$name;
+        $subsystem = trim($this->option('subsystem'));
+        if (!empty($subsystem)) return $subsystem;
+
+        $this->error("Subsystem not specified");
+        exit();         
+    }
+
+    protected function qualifyDataTypeClass($name)
+    {        
+        return $this->rootNamespace()."DataTypes\\$name";
+    }
+
+    protected function rootNamespace()
+    {
+        $subsystem = $this->getSubsystem();
+        return "Subsystem\\$subsystem\\";
+    }
+
+    protected function getPath($langKey)
+    { 
+        $subsystem = $this->getSubsystem();
+
+        return base_path("cms/subsystems/$subsystem/lang/en/{$langKey}.php");
     }
 
     protected function resolve($class_name)

@@ -49,11 +49,12 @@ class BelongsToMany extends Relationship
 		
 	}
 
-	public function buildExtraMigrations(DatatypeMigrationCreator $creator, $datatype)
+	public function buildExtraMigrations(DatatypeMigrationCreator $creator, $path, $datatype)
 	{
 		$foreignModel = new $this->model;		
 
 		return [$creator->createPivotTableMigration(
+			$path,
 			$this->tableName,
 			$this->localPivotKey ?? Str::snake(class_basename($datatype)).'_id',
 			$this->foreignPivotKey ?? $foreignModel->getForeignKey(),

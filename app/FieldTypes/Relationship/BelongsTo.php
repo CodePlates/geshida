@@ -57,7 +57,7 @@ class BelongsTo extends Relationship
 		return $creator->createFieldLine($this->field);
 	}
 
-	public function buildExtraMigrations(DatatypeMigrationCreator $creator, $datatype)
+	public function buildExtraMigrations(DatatypeMigrationCreator $creator, $path, $datatype)
 	{
 
 	}

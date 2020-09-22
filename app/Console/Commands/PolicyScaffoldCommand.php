@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
 
-class PolicyScaffoldCommand extends GeneratorCommand
+class PolicyScaffoldCommand extends SubsystemGeneratorCommand
 {
     /**
      * The name and signature of the console command.
@@ -15,6 +15,7 @@ class PolicyScaffoldCommand extends GeneratorCommand
      */
     protected $signature = 'scaffold:policy 
     {datatype : The datatype class name} 
+    {--subsystem= : The subsystem to create the policy in}  
     {--force}';
 
     /**
@@ -33,7 +34,7 @@ class PolicyScaffoldCommand extends GeneratorCommand
 
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Policies';
+        return $rootNamespace.'\App\Policies';
     }
 
     protected function buildClass($name)
@@ -46,7 +47,7 @@ class PolicyScaffoldCommand extends GeneratorCommand
 
         $stub = parent::buildClass($name);
         
-        $namespaceModel = $this->laravel->getNamespace().$datatypeName;
+        $namespaceModel = $this->rootNamespace()."Models\\$datatypeName";
         $model = class_basename(trim($datatypeName, '\\'));
 
         if (Str::startsWith($model, '\\')) {
@@ -80,26 +81,5 @@ class PolicyScaffoldCommand extends GeneratorCommand
         return $this->getDatatypeInput().'Policy';
     }
 
-    protected function getDatatypeInput()
-    {
-        return trim($this->argument('datatype'));
-    }
-
-    protected function qualifyDataTypeClass($name)
-    {
-        return "App\\DataTypes\\".$name;
-    }
-
-    protected function resolve($class_name)
-    {
-        if (class_exists($class_name))
-            return new $class_name;
-        else
-            throw new \Exception("Unable to find class ".$class_name);
-    }
-
-    protected function getOptions()
-    {
-        return [];
-    }
+    
 }

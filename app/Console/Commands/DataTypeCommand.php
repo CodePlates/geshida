@@ -2,20 +2,18 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Console\GeneratorCommand;
-use App\DataTypes\DataType;
 use Illuminate\Support\Str;
 
-
-class DataTypeCommand extends GeneratorCommand
+class DataTypeCommand extends SubsystemGeneratorCommand
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'make:datatype {name : The name of the datatype}';
+    protected $signature = 'make:datatype 
+        {name : The name of the datatype} 
+        {--subsystem= : The subsystem to create the datatype in}';
 
     /**
      * The console command description.
@@ -38,7 +36,7 @@ class DataTypeCommand extends GeneratorCommand
 
     protected function getDefaultNamespace($rootNamespace)
     {
-        return 'App\DataTypes';
+        return $rootNamespace.'\DataTypes';
     }    
     
 }

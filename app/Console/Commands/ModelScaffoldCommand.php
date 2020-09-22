@@ -8,7 +8,7 @@ use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Illuminate\Filesystem\Filesystem;
 
-class ModelScaffoldCommand extends GeneratorCommand
+class ModelScaffoldCommand extends SubsystemGeneratorCommand
 {
     /**
      * The name and signature of the console command.
@@ -17,6 +17,7 @@ class ModelScaffoldCommand extends GeneratorCommand
      */
     protected $signature = 'scaffold:model 
         {datatype : The datatype class name}  
+        {--subsystem= : The subsystem to create the model in}  
         {--force}';
 
     /**
@@ -27,7 +28,6 @@ class ModelScaffoldCommand extends GeneratorCommand
     protected $description = 'Create model class from datatype';
 
     protected $type = 'Model';
-    protected $datatype;
 
     /**
      * Execute the console command.
@@ -45,19 +45,12 @@ class ModelScaffoldCommand extends GeneratorCommand
         return __DIR__ . '/stubs/model.stub';
     }    
 
-    protected function getArguments()
-    {
-        return [
-            ['datatype', InputArgument::REQUIRED, 'The datatype class name'],
-        ];
-    }
-
     protected function buildClass($name)
     {
         $datatypeName = $this->getNameInput();
         $stub = parent::buildClass($name);
         $stub = str_replace("DummyDatatype", $datatypeName, $stub);
-        $stub = $this->addRelationships($stub,$datatypeName);
+        $stub = $this->addRelationships($stub, $datatypeName);
         return $stub;
     }
 
@@ -114,16 +107,8 @@ class ModelScaffoldCommand extends GeneratorCommand
         return $result;
     }
 
-    protected function qualifyDataTypeClass($name)
+    protected function getDefaultNamespace($rootNamespace)
     {
-        return "App\\DataTypes\\" . $name;
-    }
-
-    protected function resolve($class_name)
-    {
-        if (class_exists($class_name))
-            return new $class_name;
-        else
-            throw new \Exception("Unable to find class " . $class_name);
+        return $rootNamespace.'\Models';
     }
 }

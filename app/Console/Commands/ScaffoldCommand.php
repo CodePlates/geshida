@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
 
 class ScaffoldCommand extends Command
 {
@@ -11,7 +12,10 @@ class ScaffoldCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'scaffold:common {datatype : The datatype class name} {--force}';
+    protected $signature = 'scaffold:common 
+        {datatype : The datatype class name} 
+        {--subsystem= : The subsystem to create the scaffold resources in}
+        {--force}';
 
     /**
      * The console command description.
@@ -38,12 +42,15 @@ class ScaffoldCommand extends Command
     public function handle()
     {
         $datatype = trim($this->argument('datatype'));
+        $subsystem = trim($this->option('subsystem'));
+
         $fullArgs = [
             'datatype' => $datatype,
+            '--subsystem' => $subsystem,
             '--force' => $this->option('force'),
         ];
 
-        $this->call('scaffold:migration', compact('datatype'));
+        $this->call('scaffold:migration', Arr::except($fullArgs, ['--force']));
         $this->call('scaffold:model', $fullArgs);
         $this->call('scaffold:controller', $fullArgs);
         $this->call('scaffold:lang', $fullArgs);
